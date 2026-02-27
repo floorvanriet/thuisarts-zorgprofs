@@ -4,11 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thuisarts.nl voor Zorgprofessionals</title>
+    <meta name="robots" content="noindex, nofollow">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* ============ PASSWORD GATE ============ */
+        .pw-gate {
+            position: fixed; inset: 0; z-index: 10000;
+            background: var(--green-dark, #023729);
+            display: flex; align-items: center; justify-content: center;
+            flex-direction: column; gap: 1.5rem;
+            transition: opacity 0.4s, visibility 0.4s;
+        }
+        .pw-gate--hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .pw-gate__logo { color: #fff; margin-bottom: 0.5rem; }
+        .pw-gate__box {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px; padding: 2.5rem 2rem;
+            text-align: center; max-width: 380px; width: 90%;
+        }
+        .pw-gate__title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.25rem; font-weight: 700; color: #fff;
+            margin-bottom: 0.35rem;
+        }
+        .pw-gate__sub {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.85rem; color: rgba(255,255,255,0.5);
+            margin-bottom: 1.5rem;
+        }
+        .pw-gate__form { display: flex; gap: 0.5rem; }
+        .pw-gate__input {
+            flex: 1; padding: 0.75rem 1rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px; background: rgba(255,255,255,0.08);
+            color: #fff; font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.92rem; outline: none;
+            transition: border-color 0.2s;
+        }
+        .pw-gate__input::placeholder { color: rgba(255,255,255,0.3); }
+        .pw-gate__input:focus { border-color: rgba(216,255,124,0.5); }
+        .pw-gate__input--error { border-color: #E85C4A; animation: pwShake 0.4s; }
+        .pw-gate__btn {
+            padding: 0.75rem 1.25rem; border: none;
+            border-radius: 10px; background: #D73F0D;
+            color: #fff; font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 600; font-size: 0.88rem; cursor: pointer;
+            transition: background 0.2s;
+        }
+        .pw-gate__btn:hover { background: #BF3409; }
+        @keyframes pwShake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+        body.pw-locked { overflow: hidden; }
 
         :root {
             /* Thuisarts brand colors */
@@ -1015,7 +1069,24 @@
         }
     </style>
 </head>
-<body>
+<body class="pw-locked">
+
+    <!-- PASSWORD GATE -->
+    <div class="pw-gate" id="pwGate">
+        <div class="pw-gate__logo">
+            <svg width="48" height="48" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="100" cy="60" r="28" fill="currentColor"/><circle cx="60" cy="100" r="28" fill="currentColor"/><circle cx="140" cy="100" r="28" fill="currentColor"/><circle cx="100" cy="140" r="28" fill="currentColor"/><circle cx="60" cy="60" r="16" fill="currentColor"/><circle cx="140" cy="60" r="16" fill="currentColor"/><circle cx="60" cy="140" r="16" fill="currentColor"/><circle cx="140" cy="140" r="16" fill="currentColor"/>
+            </svg>
+        </div>
+        <div class="pw-gate__box">
+            <div class="pw-gate__title">Vertrouwelijk</div>
+            <div class="pw-gate__sub">Voer het wachtwoord in om verder te gaan</div>
+            <form class="pw-gate__form" id="pwForm">
+                <input type="password" class="pw-gate__input" id="pwInput" placeholder="Wachtwoord" autocomplete="off" autofocus>
+                <button type="submit" class="pw-gate__btn">Ga door</button>
+            </form>
+        </div>
+    </div>
 
     <!-- NAV -->
     <nav class="nav" id="nav">
@@ -1326,7 +1397,7 @@
                     Integratie-opties
                     <span class="section__label-line"></span>
                 </div>
-                <h2 class="section__title">Widgets voor uw praktijkwebsite</h2>
+                <h2 class="section__title">Van widget tot volledige integratie</h2>
                 <p class="section__desc">
                     Plaats kant-en-klare widgets op uw website. Uw pati&euml;nten krijgen direct toegang tot betrouwbare informatie, zonder uw site te verlaten.
                 </p>
@@ -2072,6 +2143,37 @@
                 }
             }
         }
+
+        // ============ PASSWORD GATE ============
+        (function() {
+            const PASS = 'zorgprofs';
+            const KEY = 'ta_pw_ok';
+
+            // Check if already authenticated this session
+            if (sessionStorage.getItem(KEY) === '1') {
+                document.getElementById('pwGate').classList.add('pw-gate--hidden');
+                document.body.classList.remove('pw-locked');
+                return;
+            }
+
+            document.getElementById('pwForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                var input = document.getElementById('pwInput');
+                if (input.value === PASS) {
+                    sessionStorage.setItem(KEY, '1');
+                    document.getElementById('pwGate').classList.add('pw-gate--hidden');
+                    document.body.classList.remove('pw-locked');
+                } else {
+                    input.classList.add('pw-gate__input--error');
+                    input.value = '';
+                    input.placeholder = 'Onjuist wachtwoord';
+                    setTimeout(function() {
+                        input.classList.remove('pw-gate__input--error');
+                        input.placeholder = 'Wachtwoord';
+                    }, 1500);
+                }
+            });
+        })();
     </script>
 </body>
 </html>
