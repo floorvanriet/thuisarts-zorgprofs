@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thuisarts.nl voor Zorgprofessionals</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            /* Thuisarts brand colors */
+            --green-dark: #023729;
+            --green-deeper: #00271D;
+            --green-mid: #045C48;
+            --green-link: #147E12;
+            --orange: #D73F0D;
+            --orange-hover: #BF3409;
+            --lime: #D8FF7C;
+            --lime-muted: #E8FFAB;
+            --off-white: #FBFBFA;
+            --white: #FFFFFF;
+            --text: #2A2A2A;
+            --text-muted: #737373;
+            --border: #E0DDD8;
+            --border-light: #EEECE8;
+
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-pill: 500px;
+
+            --shadow-sm: 0 1px 3px rgba(2, 55, 41, 0.06);
+            --shadow-md: 0 4px 12px rgba(2, 55, 41, 0.08);
+            --shadow-lg: 0 8px 28px rgba(2, 55, 41, 0.1);
+            --shadow-xl: 0 16px 40px rgba(2, 55, 41, 0.14);
+        }
+
+        html { scroll-behavior: smooth; font-size: 16px; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--off-white);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection { background: var(--lime); color: var(--green-dark); }
+
+        /* ============ NAV ============ */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 0 2rem;
+            transition: all 0.35s ease;
+        }
+        .nav--scrolled {
+            background: rgba(251, 251, 250, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 1px 0 var(--border);
+        }
+        .nav__inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            height: 72px;
+        }
+        .nav__logo {
+            display: flex; align-items: center; gap: 0.65rem;
+            text-decoration: none; color: var(--green-dark);
+        }
+        .nav__logo-svg { height: 36px; width: auto; display: flex; align-items: center; }
+        .nav__logo-svg--white svg path { fill: var(--white); }
+        .nav__logo-svg--lime svg path { fill: var(--lime); }
+        .nav__logo-sub {
+            font-size: 0.68rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.08em; color: var(--white);
+            background: var(--orange); padding: 0.2em 0.55em;
+            border-radius: var(--radius-sm); margin-left: 0.25rem;
+            display: inline-flex; align-items: center; line-height: 1;
+        }
+        .nav__links {
+            display: flex; align-items: center; gap: 2rem; list-style: none;
+        }
+        .nav__links a {
+            text-decoration: none; color: var(--text-muted);
+            font-size: 0.88rem; font-weight: 500; transition: color 0.2s;
+        }
+        .nav__links a:hover { color: var(--green-dark); }
+        .nav__cta {
+            background: var(--orange) !important; color: var(--white) !important;
+            padding: 0.55rem 1.2rem !important; border-radius: var(--radius-pill) !important;
+            font-weight: 600 !important; font-size: 0.85rem !important; transition: all 0.2s !important;
+        }
+        .nav__cta:hover {
+            background: var(--orange-hover) !important;
+            transform: translateY(-1px); box-shadow: 0 4px 12px rgba(215,63,13,0.25);
+        }
+        .nav__mobile { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; color: var(--green-dark); }
+
+        /* ============ HERO ============ */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center;
+            padding: 7rem 2rem 5rem; position: relative; overflow: hidden;
+        }
+        .hero__deco-circle {
+            position: absolute; border-radius: 50%; background: var(--lime); z-index: 0;
+            transition: transform 0.15s ease-out;
+            will-change: transform;
+        }
+        .hero__deco-circle--1 { width: 320px; height: 320px; top: 8%; right: -4%; opacity: 0.5; }
+        .hero__deco-circle--2 { width: 160px; height: 160px; bottom: 12%; right: 20%; opacity: 0.35; }
+        .hero__deco-circle--3 { width: 80px; height: 80px; top: 25%; left: 3%; opacity: 0.25; }
+        .hero__deco-half {
+            position: absolute; width: 120px; height: 60px; background: var(--lime);
+            border-radius: 0 0 120px 120px; opacity: 0.3; z-index: 0;
+            transition: transform 0.15s ease-out;
+            will-change: transform;
+        }
+        .hero__deco-half--1 { top: 18%; right: 12%; transform: rotate(25deg); }
+        .hero__deco-half--2 { bottom: 25%; right: 8%; transform: rotate(-15deg); }
+        .hero__inner {
+            max-width: 1200px; margin: 0 auto; width: 100%; position: relative; z-index: 1;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+        }
+        .hero__badge {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: var(--green-dark); color: var(--lime);
+            padding: 0.4rem 1rem; border-radius: var(--radius-pill);
+            font-size: 0.78rem; font-weight: 600; margin-bottom: 1.75rem;
+            opacity: 0; animation: fadeUp 0.7s ease 0.2s forwards;
+        }
+        .hero__badge-dot { width: 6px; height: 6px; background: var(--lime); border-radius: 50%; }
+        .hero__title {
+            font-size: clamp(2.6rem, 4.5vw, 3.8rem); font-weight: 800;
+            line-height: 1.08; letter-spacing: -0.035em;
+            color: var(--green-dark); margin-bottom: 1.5rem;
+            opacity: 0; animation: fadeUp 0.7s ease 0.35s forwards;
+        }
+        .hero__title-accent { color: var(--orange); }
+        .hero__subtitle {
+            font-size: 1.1rem; line-height: 1.75; color: var(--text-muted);
+            margin-bottom: 2.5rem; max-width: 480px;
+            opacity: 0; animation: fadeUp 0.7s ease 0.5s forwards;
+        }
+        .hero__actions {
+            display: flex; gap: 1rem; align-items: center;
+            opacity: 0; animation: fadeUp 0.7s ease 0.65s forwards;
+        }
+        .btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.85rem 1.75rem; border-radius: var(--radius-pill);
+            font-family: inherit; font-weight: 700; font-size: 0.95rem;
+            text-decoration: none; cursor: pointer; border: none;
+            transition: all 0.25s ease;
+        }
+        .btn--orange {
+            background: var(--orange); color: var(--white);
+            box-shadow: 0 2px 12px rgba(215,63,13,0.25);
+        }
+        .btn--orange:hover {
+            background: var(--orange-hover); transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(215,63,13,0.35);
+        }
+        .btn--outline {
+            background: var(--white); color: var(--green-dark);
+            border: 1.5px solid var(--border);
+        }
+        .btn--outline:hover {
+            border-color: var(--green-dark); transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        .btn__arrow { transition: transform 0.2s; }
+        .btn:hover .btn__arrow { transform: translateX(3px); }
+
+        /* Hero mockup */
+        .hero__visual { position: relative; opacity: 0; animation: fadeUp 0.7s ease 0.5s forwards; }
+        .hero__mockup {
+            background: var(--white); border-radius: var(--radius-xl);
+            padding: 1.75rem; box-shadow: var(--shadow-xl); border: 1px solid var(--border-light);
+        }
+        .hero__mockup-bar {
+            display: flex; align-items: center; gap: 6px;
+            margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-light);
+        }
+        .hero__mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .hero__mockup-dot--r { background: #FF6B6B; }
+        .hero__mockup-dot--y { background: #FFD93D; }
+        .hero__mockup-dot--g { background: #6BCB77; }
+        .hero__mockup-url {
+            flex: 1; background: var(--off-white); border-radius: var(--radius-pill);
+            padding: 0.35rem 0.9rem; margin-left: 0.75rem;
+            font-size: 0.72rem; color: var(--text-muted);
+        }
+        .hero__mockup-search {
+            display: flex; align-items: center; gap: 0.65rem;
+            border: 1.5px solid var(--green-dark); border-radius: var(--radius-pill);
+            padding: 0.7rem 0.75rem 0.7rem 1.1rem; margin-bottom: 1.25rem;
+        }
+        .hero__mockup-search svg { color: var(--green-dark); flex-shrink: 0; }
+        .hero__mockup-search span { color: var(--text-muted); font-size: 0.85rem; flex: 1; }
+        .hero__mockup-search-btn {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: var(--orange); border: none; color: white;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+        }
+        .hero__mockup-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+        .hero__tile {
+            background: var(--green-dark); border-radius: var(--radius-lg);
+            padding: 1.1rem; color: var(--white); position: relative; overflow: hidden;
+        }
+        .hero__tile-deco {
+            position: absolute; top: -8px; right: -8px; width: 32px; height: 32px;
+            background: var(--lime); border-radius: 50%; opacity: 0.3;
+        }
+        .hero__tile-title { font-weight: 700; font-size: 0.82rem; margin-bottom: 0.2rem; }
+        .hero__tile-text { font-size: 0.68rem; color: var(--lime-muted); opacity: 0.8; }
+
+        .hero__float {
+            position: absolute; background: var(--white);
+            border-radius: var(--radius-lg); padding: 1rem 1.25rem;
+            box-shadow: var(--shadow-lg); border: 1px solid var(--border-light); z-index: 2;
+        }
+        .hero__float--1 { bottom: -16px; left: -24px; animation: float 5s ease-in-out infinite; }
+        .hero__float--2 { top: 24px; right: -20px; animation: float 5s ease-in-out 1.5s infinite; }
+        .hero__float-num {
+            font-size: 1.5rem; font-weight: 800; color: var(--green-dark); line-height: 1;
+        }
+        .hero__float-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 500; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============ PROOF BAR ============ */
+        .proof {
+            padding: 2.5rem 2rem; border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light); background: var(--white);
+        }
+        .proof__inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: center;
+            gap: 3rem; flex-wrap: wrap;
+        }
+        .proof__item { display: flex; align-items: center; gap: 0.6rem; font-size: 0.88rem; color: var(--text-muted); }
+        .proof__item-icon {
+            width: 38px; height: 38px; background: var(--green-dark);
+            border-radius: var(--radius-sm); display: flex; align-items: center;
+            justify-content: center; color: var(--lime);
+        }
+        .proof__item strong { color: var(--green-dark); font-weight: 700; }
+
+        /* ============ SECTION UTILITIES ============ */
+        .section { padding: 6rem 2rem; }
+        .section--white { background: var(--white); }
+        .section--green { background: var(--green-dark); color: var(--white); }
+        .section--deep { background: var(--green-deeper); color: var(--white); }
+        .section__inner { max-width: 1200px; margin: 0 auto; }
+        .section__header { max-width: 600px; margin-bottom: 3.5rem; }
+        .section__header--center { text-align: center; margin-left: auto; margin-right: auto; }
+        .section__label {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.12em; color: var(--orange); margin-bottom: 0.75rem;
+        }
+        .section__label-line { width: 20px; height: 2px; background: var(--orange); border-radius: 1px; }
+        .section__title {
+            font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 800;
+            line-height: 1.15; letter-spacing: -0.025em;
+            color: var(--green-dark); margin-bottom: 1rem;
+        }
+        .section--green .section__title,
+        .section--deep .section__title { color: var(--white); }
+        .section--green .section__label,
+        .section--deep .section__label { color: var(--lime); }
+        .section--green .section__label-line,
+        .section--deep .section__label-line { background: var(--lime); }
+        .section__desc { font-size: 1.02rem; color: var(--text-muted); line-height: 1.75; }
+        .section--green .section__desc,
+        .section--deep .section__desc { color: rgba(255,255,255,0.7); }
+
+        /* ============ ABOUT ============ */
+        .about__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .about__features { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+        .about__feature {
+            padding: 1.4rem; background: var(--white); border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light); transition: all 0.3s;
+        }
+        .about__feature:hover { border-color: var(--green-dark); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .about__feature-icon {
+            width: 42px; height: 42px; background: var(--green-dark);
+            border-radius: var(--radius-sm); display: flex; align-items: center;
+            justify-content: center; color: var(--lime); margin-bottom: 0.9rem;
+        }
+        .about__feature-title { font-weight: 700; font-size: 0.92rem; color: var(--green-dark); margin-bottom: 0.3rem; }
+        .about__feature-text { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+
+        .about__visual-frame {
+            background: var(--green-dark); border-radius: var(--radius-xl);
+            padding: 2.5rem; position: relative; overflow: hidden;
+        }
+        .about__visual-deco {
+            position: absolute; width: 100px; height: 100px;
+            background: var(--lime); border-radius: 50%; opacity: 0.15;
+            top: -20px; right: -20px;
+            animation: decoFloat 8s ease-in-out infinite;
+        }
+        @keyframes decoFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-6px, 8px) scale(1.05); }
+            66% { transform: translate(4px, -5px) scale(0.97); }
+        }
+        .about__stat-row { display: flex; gap: 1rem; margin-bottom: 1rem; }
+        .about__stat-card {
+            flex: 1; background: rgba(255,255,255,0.08); backdrop-filter: blur(8px);
+            border-radius: var(--radius-lg); padding: 1.25rem; text-align: center;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .about__stat-num { font-size: 2rem; font-weight: 800; color: var(--lime); line-height: 1; }
+        .about__stat-text { font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-top: 0.3rem; }
+        .about__quote {
+            background: rgba(255,255,255,0.06); border-radius: var(--radius-lg);
+            padding: 1.5rem; border: 1px solid rgba(255,255,255,0.08);
+            margin-top: 1rem; position: relative;
+        }
+        .about__quote::before {
+            content: '\201C'; font-size: 3rem; color: var(--lime); opacity: 0.4;
+            position: absolute; top: 0.25rem; left: 1rem; line-height: 1;
+        }
+        .about__quote-text {
+            font-size: 0.88rem; color: rgba(255,255,255,0.8);
+            font-style: italic; padding-left: 2rem; line-height: 1.65;
+        }
+        .about__quote-author {
+            font-size: 0.75rem; color: rgba(255,255,255,0.5);
+            font-weight: 600; padding-left: 2rem; margin-top: 0.6rem;
+        }
+
+        /* ============ WIDGETS ============ */
+        .widgets__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+        .widget-card {
+            background: var(--white); border-radius: var(--radius-lg);
+            padding: 2.25rem 1.75rem; border: 2px solid var(--border-light);
+            transition: all 0.4s ease; position: relative;
+        }
+        .widget-card:hover {
+            transform: translateY(-4px); box-shadow: var(--shadow-lg);
+            border-color: transparent;
+            background:
+                linear-gradient(var(--white), var(--white)) padding-box,
+                conic-gradient(from var(--gradient-angle, 0deg), var(--green-dark), var(--lime), var(--green-mid), var(--lime), var(--green-dark)) border-box;
+            animation: rotateGradient 3s linear infinite;
+        }
+        @keyframes rotateGradient {
+            0% { --gradient-angle: 0deg; }
+            100% { --gradient-angle: 360deg; }
+        }
+        @property --gradient-angle {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
+        }
+        .widget-card__icon {
+            width: 52px; height: 52px; border-radius: var(--radius-md);
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;
+        }
+        .widget-card__icon--search { background: var(--green-dark); color: var(--lime); }
+        .widget-card__icon--tile { background: var(--green-dark); color: var(--lime); }
+        .widget-card__icon--count { background: var(--orange); color: var(--white); }
+        .widget-card__icon--api { background: var(--green-deeper); color: var(--lime); }
+        .widget-card__title {
+            font-size: 1.2rem; font-weight: 800; color: var(--green-dark);
+            margin-bottom: 0.6rem; letter-spacing: -0.01em;
+        }
+        .widget-card__desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 1.5rem; }
+        .widget-card__preview {
+            background: var(--off-white); border-radius: var(--radius-md);
+            padding: 1.1rem; border: 1px solid var(--border-light);
+        }
+        .widget-card__preview-label {
+            font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--text-muted); font-weight: 700; margin-bottom: 0.65rem;
+        }
+        /* Search preview */
+        .p-search {
+            display: flex; align-items: center; gap: 0.5rem;
+            background: var(--white); border: 1.5px solid var(--green-dark);
+            border-radius: var(--radius-pill); padding: 0.45rem 0.45rem 0.45rem 0.85rem;
+        }
+        .p-search svg { color: var(--green-dark); flex-shrink: 0; }
+        .p-search span { font-size: 0.75rem; color: var(--text-muted); flex: 1; }
+        .p-search-btn {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: var(--orange); border: none; color: white;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        /* Tile preview */
+        .p-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+        .p-tile {
+            background: var(--green-dark); border-radius: var(--radius-sm);
+            padding: 0.6rem; color: var(--white); text-align: center;
+        }
+        .p-tile__name { font-size: 0.68rem; font-weight: 700; }
+        /* Count preview */
+        .p-counts { display: flex; gap: 0.5rem; }
+        .p-count {
+            flex: 1; background: var(--white); border-radius: var(--radius-sm);
+            padding: 0.55rem; text-align: center; border: 1px solid var(--border-light);
+        }
+        .p-count__num { font-size: 1.1rem; font-weight: 800; color: var(--green-dark); line-height: 1; }
+        .p-count__label { font-size: 0.58rem; color: var(--text-muted); margin-top: 0.15rem; }
+
+        .widget-card__tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.1rem; }
+        .widget-card__tag {
+            font-size: 0.68rem; font-weight: 600; padding: 0.2rem 0.6rem;
+            border-radius: var(--radius-pill); background: var(--off-white);
+            color: var(--green-dark); border: 1px solid var(--border-light);
+        }
+
+        /* ============ EXAMPLES SECTION ============ */
+        .search-section { position: relative; overflow: hidden; }
+        .search-section__bg {
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 20% 50%, rgba(216,255,124,0.12) 0%, transparent 50%);
+        }
+        .examples__grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+            position: relative;
+        }
+        .example-card {
+            background: var(--white); border-radius: var(--radius-xl);
+            padding: 2rem; border: 1px solid var(--border-light);
+            transition: all 0.3s ease; position: relative;
+            display: flex; flex-direction: column;
+        }
+        .example-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .example-card__badge {
+            display: inline-flex; align-self: flex-start;
+            font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.08em; padding: 0.3rem 0.75rem;
+            border-radius: var(--radius-pill); margin-bottom: 1.25rem;
+            background: rgba(2, 55, 41, 0.08); color: var(--green-dark);
+        }
+        .example-card__badge--widget {
+            background: rgba(215, 63, 13, 0.08); color: var(--orange);
+        }
+        .example-card__header {
+            display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1rem;
+        }
+        .example-card__icon {
+            width: 48px; height: 48px; background: var(--green-dark);
+            border-radius: var(--radius-md); display: flex; align-items: center;
+            justify-content: center; color: var(--lime); flex-shrink: 0;
+        }
+        .example-card__title {
+            font-size: 1.15rem; font-weight: 800; color: var(--green-dark);
+            letter-spacing: -0.01em;
+        }
+        .example-card__subtitle {
+            font-size: 0.78rem; color: var(--text-muted); font-weight: 500;
+        }
+        .example-card__desc {
+            font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+        .example-card__preview {
+            border-radius: var(--radius-md); overflow: hidden;
+            border: 1px solid var(--border-light); margin-bottom: 1.5rem; flex: 1;
+        }
+        .example-card__browser {
+            display: flex; align-items: center; gap: 6px;
+            padding: 0.6rem 0.85rem; background: var(--off-white);
+            border-bottom: 1px solid var(--border-light);
+        }
+        .example-card__browser-dots {
+            display: flex; gap: 4px;
+        }
+        .example-card__browser-dots span {
+            width: 8px; height: 8px; border-radius: 50%;
+        }
+        .example-card__browser-dots span:nth-child(1) { background: #FF6B6B; }
+        .example-card__browser-dots span:nth-child(2) { background: #FFD93D; }
+        .example-card__browser-dots span:nth-child(3) { background: #6BCB77; }
+        .example-card__browser-url {
+            flex: 1; font-size: 0.65rem; color: var(--text-muted);
+            background: var(--white); padding: 0.25rem 0.6rem;
+            border-radius: var(--radius-pill); margin-left: 0.4rem;
+        }
+        .example-card__browser-body { padding: 1.1rem; background: var(--white); }
+        .example-card__mock-title {
+            font-size: 1rem; font-weight: 800; color: var(--green-dark); margin-bottom: 0.4rem;
+        }
+        .example-card__mock-source {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            font-size: 0.65rem; color: var(--green-mid); font-weight: 600;
+            background: rgba(216,255,124,0.2); padding: 0.2rem 0.5rem;
+            border-radius: var(--radius-pill); margin-bottom: 0.75rem;
+        }
+        .example-card__mock-lines {
+            display: flex; flex-direction: column; gap: 0.4rem;
+        }
+        .example-card__mock-lines div {
+            height: 8px; background: var(--border-light); border-radius: 4px;
+        }
+        .example-card__mock-tags {
+            display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem;
+        }
+        .example-card__mock-tags span {
+            font-size: 0.68rem; font-weight: 600; padding: 0.3rem 0.65rem;
+            border-radius: var(--radius-pill); background: var(--green-dark);
+            color: var(--white);
+        }
+        .example-card__link {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            font-size: 0.85rem; font-weight: 700; color: var(--green-dark);
+            text-decoration: none; transition: all 0.2s;
+        }
+        .example-card__link:hover { color: var(--orange); gap: 0.6rem; }
+        .example-card__logo {
+            height: 32px; width: auto; object-fit: contain;
+        }
+
+        /* ============ SHARE INFO SECTION ============ */
+        .share__grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;
+            margin-top: 0.5rem;
+        }
+        .share-card {
+            background: var(--white); border: 1px solid var(--border-light);
+            border-radius: var(--radius-xl); padding: 2rem 2rem 0;
+            transition: all 0.3s; position: relative; overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+        .share-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--border); }
+        .share-card__text { flex: 0 0 auto; }
+        .share-card__title {
+            font-weight: 800; font-size: 1.25rem; margin-bottom: 0.5rem;
+            color: var(--green-dark); line-height: 1.3;
+        }
+        .share-card__desc {
+            font-size: 0.88rem; color: var(--text-muted); line-height: 1.65;
+            margin-bottom: 1.5rem;
+        }
+        .share-card__img {
+            flex: 1 1 auto; min-height: 220px;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            overflow: hidden; margin: 0 -0.5rem;
+            display: flex; align-items: flex-end; justify-content: center;
+        }
+        .share-card__img img {
+            width: 100%; height: 100%; object-fit: cover; object-position: top;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+        /* Placeholder styling when no image is present */
+        .share-card__img--placeholder {
+            background: var(--off-white);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .share-card__img--placeholder svg {
+            width: 64px; height: 64px; color: rgba(2,55,41,0.15);
+        }
+
+        /* ============ HIS SECTION ============ */
+        .his__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .his__logos {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;
+        }
+        .his__logo-card {
+            background: var(--white); border-radius: var(--radius-lg);
+            padding: 1.75rem 1.25rem; text-align: center;
+            border: 1px solid var(--border-light); transition: all 0.3s;
+            display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+        }
+        .his__logo-card:hover { border-color: var(--green-dark); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .his__logo-icon {
+            width: 56px; height: 56px; border-radius: var(--radius-md);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; font-weight: 800; color: var(--white);
+        }
+        .his__logo-icon--medicom { background: #1B5E9E; }
+        .his__logo-icon--microhis { background: #E85D26; }
+        .his__logo-icon--promedico { background: #00875A; }
+        .his__logo-icon--tetrahis { background: #6B4C9A; }
+        .his__logo-name { font-weight: 700; font-size: 0.88rem; color: var(--green-dark); }
+        .his__logo-status {
+            font-size: 0.68rem; font-weight: 600; color: var(--green-mid);
+            display: inline-flex; align-items: center; gap: 0.3rem;
+        }
+        .his__logo-status-dot {
+            width: 6px; height: 6px; background: #6BCB77; border-radius: 50%;
+        }
+        .his__mockup {
+            background: var(--white); border-radius: var(--radius-xl);
+            padding: 1.5rem; box-shadow: var(--shadow-lg); border: 1px solid var(--border-light);
+        }
+        .his__mockup-bar {
+            display: flex; align-items: center; gap: 6px;
+            margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-light);
+        }
+        .his__mockup-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .his__mockup-dot--r { background: #FF6B6B; }
+        .his__mockup-dot--y { background: #FFD93D; }
+        .his__mockup-dot--g { background: #6BCB77; }
+        .his__mockup-title { margin-left: 0.5rem; font-size: 0.65rem; color: var(--text-muted); }
+        .his__mockup-patient {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.75rem; background: var(--off-white); border-radius: var(--radius-sm);
+            margin-bottom: 0.75rem;
+        }
+        .his__mockup-avatar {
+            width: 36px; height: 36px; background: var(--green-dark);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: var(--lime); font-weight: 700; font-size: 0.75rem;
+        }
+        .his__mockup-name { font-weight: 700; font-size: 0.78rem; color: var(--text); }
+        .his__mockup-meta { font-size: 0.62rem; color: var(--text-muted); }
+        .his__mockup-thuisarts {
+            border: 1.5px solid var(--green-dark); border-radius: var(--radius-md);
+            padding: 0.85rem;
+        }
+        .his__mockup-thuisarts-header {
+            display: flex; align-items: center; gap: 0.4rem;
+            margin-bottom: 0.5rem; font-size: 0.68rem; font-weight: 700; color: var(--green-dark);
+        }
+        .his__mockup-thuisarts-header svg { flex-shrink: 0; }
+        .his__mockup-thuisarts-items { display: flex; flex-direction: column; gap: 0.35rem; }
+        .his__mockup-thuisarts-item {
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.4rem 0.6rem; background: var(--off-white); border-radius: var(--radius-sm);
+            font-size: 0.68rem; color: var(--text); cursor: pointer; transition: all 0.2s;
+        }
+        .his__mockup-thuisarts-item:hover { background: var(--border-light); }
+        .his__mockup-thuisarts-item svg { color: var(--green-dark); flex-shrink: 0; }
+
+        /* ============ API ============ */
+        .api__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; position: relative; }
+        .api__bg {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(216,255,124,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(216,255,124,0.04) 1px, transparent 1px);
+            background-size: 48px 48px;
+        }
+        .api__features { display: flex; flex-direction: column; gap: 1.35rem; margin-top: 2.25rem; }
+        .api__feature { display: flex; gap: 0.85rem; align-items: flex-start; }
+        .api__feature-icon {
+            width: 38px; height: 38px; background: rgba(216,255,124,0.12);
+            border-radius: var(--radius-sm); display: flex; align-items: center;
+            justify-content: center; color: var(--lime); flex-shrink: 0;
+        }
+        .api__feature-title { font-weight: 700; font-size: 0.92rem; margin-bottom: 0.15rem; }
+        .api__feature-text { font-size: 0.82rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+
+        .api__code {
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.06);
+            border-radius: var(--radius-lg); overflow: hidden;
+        }
+        .api__code-header {
+            display: flex; align-items: center; gap: 6px;
+            padding: 0.9rem 1.25rem; background: rgba(0,0,0,0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .api__code-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .api__code-dot--r { background: #FF6B6B; }
+        .api__code-dot--y { background: #FFD93D; }
+        .api__code-dot--g { background: #6BCB77; }
+        .api__code-title {
+            margin-left: 0.75rem; font-size: 0.72rem; color: rgba(255,255,255,0.35);
+        }
+        .api__code-body {
+            padding: 1.4rem; font-family: 'SF Mono', 'Consolas', 'Menlo', monospace;
+            font-size: 0.78rem; line-height: 1.9; overflow-x: auto;
+        }
+        .kw { color: #7DD3FC; }
+        .str { color: var(--lime); }
+        .cmt { color: rgba(255,255,255,0.28); font-style: italic; }
+        .fn { color: #C4B5FD; }
+        .prop { color: #FDE68A; }
+        .pn { color: rgba(255,255,255,0.45); }
+
+        /* ============ APP ============ */
+        .app__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .app__phone-wrap { display: flex; justify-content: center; }
+        .app__phone {
+            width: 280px; background: #1A1A1A;
+            border-radius: 40px; padding: 10px;
+            box-shadow: var(--shadow-xl), 0 0 0 1px rgba(255,255,255,0.08);
+        }
+        .app__phone-notch {
+            position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+            width: 95px; height: 28px; background: #1A1A1A;
+            border-radius: 0 0 16px 16px; z-index: 3;
+        }
+        .app__phone-screen {
+            background: var(--white); border-radius: 32px;
+            overflow: hidden; position: relative;
+        }
+        /* Status bar */
+        .app__phone-statusbar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0.5rem 1.25rem 0.25rem; background: var(--off-white);
+            font-size: 0.62rem; font-weight: 600; color: var(--text);
+        }
+        .app__phone-statusbar-icons { display: flex; gap: 0.3rem; align-items: center; }
+        /* App header with logo */
+        .app__phone-logo-area {
+            background: var(--off-white); padding: 0.5rem 1.25rem 0.65rem;
+            display: flex; justify-content: center;
+        }
+        .app__phone-logo-area svg { height: 22px; width: auto; }
+        /* Green search card */
+        .app__phone-search-card {
+            margin: 0 0.85rem; background: var(--green-dark);
+            border-radius: var(--radius-lg); padding: 1rem 1rem 0.85rem;
+            color: white;
+        }
+        .app__phone-greeting { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.1rem; }
+        .app__phone-greeting-sub { font-size: 0.65rem; opacity: 0.7; margin-bottom: 0.6rem; }
+        .app__phone-search-input {
+            display: flex; align-items: center; gap: 0.4rem;
+            background: var(--white); border-radius: var(--radius-pill);
+            padding: 0.4rem 0.4rem 0.4rem 0.75rem;
+        }
+        .app__phone-search-input span {
+            flex: 1; font-size: 0.65rem; color: var(--text-muted);
+        }
+        .app__phone-search-btn {
+            width: 26px; height: 26px; border-radius: 50%;
+            background: var(--orange); display: flex; align-items: center;
+            justify-content: center; flex-shrink: 0;
+        }
+        .app__phone-search-btn svg { width: 12px; height: 12px; color: white; }
+        /* News list */
+        .app__phone-news {
+            padding: 0.85rem 1rem 0;
+        }
+        .app__phone-news-title {
+            font-size: 0.72rem; font-weight: 700; color: var(--text);
+            margin-bottom: 0.6rem;
+        }
+        .app__phone-news-item {
+            display: flex; gap: 0.65rem; align-items: center;
+            padding: 0.5rem 0; border-bottom: 1px solid var(--border-light);
+        }
+        .app__phone-news-thumb {
+            width: 48px; height: 48px; border-radius: var(--radius-sm);
+            background: var(--border-light); flex-shrink: 0; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem;
+        }
+        .app__phone-news-text {
+            font-size: 0.68rem; font-weight: 600; color: var(--text);
+            line-height: 1.35;
+        }
+        /* Tab bar */
+        .app__phone-tabbar {
+            display: flex; align-items: center; justify-content: space-around;
+            padding: 0.55rem 0.5rem 0.65rem; border-top: 1px solid var(--border-light);
+            margin-top: 0.5rem;
+        }
+        .app__phone-tab {
+            display: flex; flex-direction: column; align-items: center; gap: 0.15rem;
+        }
+        .app__phone-tab svg { width: 16px; height: 16px; color: var(--text-muted); }
+        .app__phone-tab span { font-size: 0.52rem; font-weight: 600; color: var(--text-muted); }
+        .app__phone-tab--active svg { color: var(--green-dark); }
+        .app__phone-tab--active span { color: var(--green-dark); }
+
+        .app__features { display: flex; flex-direction: column; gap: 1.35rem; margin-top: 2rem; }
+        .app__feat { display: flex; gap: 0.85rem; align-items: flex-start; }
+        .app__feat-icon {
+            width: 42px; height: 42px; background: var(--green-dark);
+            border-radius: var(--radius-sm); display: flex; align-items: center;
+            justify-content: center; color: var(--lime); flex-shrink: 0;
+        }
+        .app__feat-title { font-weight: 700; font-size: 0.92rem; color: var(--green-dark); margin-bottom: 0.15rem; }
+        .app__feat-text { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+        .app__stores { display: flex; gap: 0.75rem; margin-top: 2.25rem; }
+        .app__store-btn {
+            display: inline-flex; align-items: center; gap: 0.55rem;
+            background: var(--green-dark); color: var(--white);
+            text-decoration: none; padding: 0.7rem 1.1rem;
+            border-radius: var(--radius-md); transition: all 0.2s;
+        }
+        .app__store-btn:hover { background: var(--green-deeper); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .app__store-btn svg { width: 18px; height: 18px; }
+        .app__store-sm { font-size: 0.58rem; opacity: 0.7; }
+        .app__store-big { font-size: 0.85rem; font-weight: 700; line-height: 1.1; }
+
+        /* ============ CTA ============ */
+        .cta { padding: 6rem 2rem; position: relative; overflow: hidden; }
+        .cta__deco {
+            position: absolute; width: 400px; height: 400px;
+            border-radius: 50%; background: var(--lime); opacity: 0.06;
+        }
+        .cta__deco--1 { top: -150px; right: -100px; }
+        .cta__deco--2 { bottom: -200px; left: -120px; }
+        .cta__inner { max-width: 640px; margin: 0 auto; text-align: center; position: relative; }
+        .cta__title {
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem); font-weight: 800;
+            line-height: 1.15; letter-spacing: -0.025em;
+            color: var(--green-dark); margin-bottom: 1rem;
+        }
+        .cta__desc { font-size: 1.02rem; color: var(--text-muted); line-height: 1.75; margin-bottom: 2.5rem; }
+        .cta__form {
+            background: var(--white); border-radius: var(--radius-xl);
+            padding: 2.25rem; box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light); text-align: left;
+        }
+        .cta__row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 0.85rem; }
+        .cta__group { display: flex; flex-direction: column; gap: 0.35rem; }
+        .cta__group--full { grid-column: 1 / -1; }
+        .cta__label { font-size: 0.8rem; font-weight: 700; color: var(--green-dark); }
+        .cta__input, .cta__select, .cta__textarea {
+            padding: 0.7rem 0.9rem; border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm); font-family: inherit;
+            font-size: 0.88rem; color: var(--text); background: var(--off-white);
+            transition: all 0.2s; outline: none;
+        }
+        .cta__input:focus, .cta__select:focus, .cta__textarea:focus {
+            border-color: var(--green-dark); background: var(--white);
+            box-shadow: 0 0 0 3px rgba(2,55,41,0.08);
+        }
+        .cta__textarea { min-height: 90px; resize: vertical; }
+        .cta__submit {
+            width: 100%; margin-top: 0.85rem; padding: 0.85rem;
+            background: var(--orange); color: white; border: none;
+            border-radius: var(--radius-pill); font-family: inherit;
+            font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.25s;
+        }
+        .cta__submit:hover {
+            background: var(--orange-hover); transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(215,63,13,0.3);
+        }
+        .cta__note { text-align: center; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.85rem; }
+
+        /* ============ FOOTER ============ */
+        .footer { background: var(--green-deeper); color: var(--white); padding: 4rem 2rem 2rem; }
+        .footer__inner { max-width: 1200px; margin: 0 auto; }
+        .footer__grid {
+            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 2.5rem; padding-bottom: 2.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .footer__brand { max-width: 260px; }
+        .footer__logo { margin-bottom: 0.85rem; }
+        .footer__logo-svg { height: 26px; width: auto; }
+        .footer__logo-svg svg path { fill: var(--white); }
+        .footer__brand-text { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+        .footer__col-title {
+            font-weight: 700; font-size: 0.78rem; text-transform: uppercase;
+            letter-spacing: 0.1em; color: var(--lime); margin-bottom: 1.1rem;
+        }
+        .footer__links { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+        .footer__links a {
+            text-decoration: none; color: rgba(255,255,255,0.55);
+            font-size: 0.85rem; transition: color 0.2s;
+        }
+        .footer__links a:hover { color: var(--white); }
+        .footer__bottom {
+            padding-top: 1.75rem; display: flex; align-items: center; justify-content: space-between;
+        }
+        .footer__copy { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+        .footer__nhg {
+            font-size: 0.78rem; color: rgba(255,255,255,0.3);
+            display: flex; align-items: center; gap: 0.4rem;
+        }
+        .footer__nhg-dot { width: 6px; height: 6px; background: var(--lime); border-radius: 50%; }
+
+        /* ============ SCROLL ANIMATION ============ */
+        .reveal {
+            opacity: 0; transform: translateY(24px);
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal--visible { opacity: 1; transform: translateY(0); }
+        .reveal--d1 { transition-delay: 0.1s; }
+        .reveal--d2 { transition-delay: 0.2s; }
+        .reveal--d3 { transition-delay: 0.3s; }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 1024px) {
+            .hero__inner, .about__grid, .search__grid, .api__grid, .app__grid, .his__grid {
+                grid-template-columns: 1fr; gap: 3rem;
+            }
+            .footer__grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+            .hero__visual { max-width: 480px; }
+            .share__grid { grid-template-columns: 1fr; }
+            .share-card__img { min-height: 200px; }
+        }
+        @media (max-width: 768px) {
+            .section { padding: 4rem 1.25rem; }
+            .nav__links { display: none; }
+            .nav__mobile { display: block; }
+            .nav__links--open {
+                display: flex; flex-direction: column; position: absolute;
+                top: 72px; left: 0; right: 0;
+                background: rgba(251,251,250,0.98); backdrop-filter: blur(16px);
+                padding: 1.5rem 2rem; border-bottom: 1px solid var(--border); gap: 1rem;
+            }
+            .hero { min-height: auto; padding: 6rem 1.25rem 3.5rem; }
+            .hero__actions { flex-direction: column; align-items: stretch; }
+            .btn { justify-content: center; }
+            .widgets__grid { grid-template-columns: 1fr; }
+            .examples__grid { grid-template-columns: 1fr; }
+            .share__grid { grid-template-columns: 1fr; }
+            .share-card__img { min-height: 180px; }
+            .his__logos { grid-template-columns: 1fr 1fr; }
+            .about__features { grid-template-columns: 1fr; }
+            .cta__row { grid-template-columns: 1fr; }
+            .app__phone { width: 240px; }
+            .app__stores { flex-direction: column; }
+            .proof__inner { flex-direction: column; gap: 1.25rem; }
+            .footer__grid { grid-template-columns: 1fr; }
+            .footer__bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+            .hero__float { display: none; }
+            .hero__deco-circle, .hero__deco-half { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav class="nav" id="nav">
+        <div class="nav__inner">
+            <a href="#" class="nav__logo">
+                <div class="nav__logo-svg"><svg xmlns="http://www.w3.org/2000/svg" width="161" height="40" viewBox="0 0 161 40"><g fill="#023729" fill-rule="nonzero"><path d="m100.95 25.935 1.511-2.143c1.396 1.128 2.876 1.42 3.863 1.42 1.483 0 2.295-.637 2.295-1.565 0-2.721-7.177-1.04-7.177-5.992 0-2.517 1.861-4.315 4.737-4.315 1.164 0 3.108.291 4.678 1.565l-1.48 2.055a5.349 5.349 0 0 0-3.166-1.07c-1.396 0-2.005.695-2.005 1.449 0 2.604 7.148 1.186 7.148 6.137 0 2.634-2.006 4.256-5.114 4.256-2.063 0-3.862-.724-5.288-1.793l-.003-.004ZM98.843 24.826v2.576c-.297.12-1.182.33-2.216.33-3.456 0-4.076-2.306-4.076-4.761v-7.127h-2.825v-2.725h2.825V8.3h2.865v4.82h3.812v2.725h-3.812v6.8c0 1.618.355 2.397 1.86 2.397.505 0 1.27-.091 1.567-.211v-.004ZM82.432 27.733h-2.734V13.61h2.734v1.695c1.31-1.633 2.652-1.96 5.274-1.96v2.735c-4.476 0-5.274 1.903-5.274 4.34v7.313ZM76.553 27.354H73.7v-1.622c-1.19 1.36-2.825 1.997-4.726 1.997-4.192 0-7.46-3.154-7.46-7.182 0-4.027 3.33-7.21 7.46-7.21 1.905 0 3.508.666 4.726 2.026V13.6h2.854v13.755Zm-2.916-6.803c0-2.488-1.99-4.573-4.667-4.573-2.677 0-4.639 2.026-4.639 4.573 0 2.547 1.991 4.573 4.639 4.573 2.647 0 4.667-2.085 4.667-4.573ZM49.614 25.935l1.512-2.143c1.396 1.128 2.876 1.42 3.862 1.42 1.484 0 2.296-.637 2.296-1.565 0-2.721-7.177-1.04-7.177-5.992 0-2.517 1.86-4.315 4.736-4.315 1.165 0 3.109.291 4.679 1.565l-1.48 2.055c-1.222-.898-2.44-1.07-3.166-1.07-1.396 0-2.005.695-2.005 1.449 0 2.604 7.148 1.186 7.148 6.137 0 2.634-2.006 4.256-5.114 4.256-2.063 0-3.866-.724-5.288-1.793l-.003-.004ZM46.836 27.733H44V13.345h2.836zM38.016 20.86v-7.52h2.843v8.317c0 4.395-2.459 6.075-6.397 6.075-3.94 0-6.398-1.68-6.398-6.075V13.34h2.872v7.52c0 2.623.624 4.217 3.526 4.217 2.9 0 3.554-1.594 3.554-4.217ZM25.144 27.733h-2.905v-7.578c0-2.892-1.106-4.384-3.471-4.384s-3.623 1.612-3.623 4.595v7.367h-2.873V5.206h2.873v9.62c.957-1.096 2.125-1.827 4.13-1.827 3.384 0 5.869 2.008 5.869 6.545v8.19ZM9.335 24.86v2.546c-.3.12-1.211.327-2.266.327-3.54 0-4.175-2.28-4.175-4.707v-7.047H0v-2.696h2.894V8.299h2.934v4.984h3.903v2.696H5.828v6.723c0 1.6.363 2.368 1.904 2.368.515 0 1.302-.087 1.603-.207v-.004ZM141.059 13.162c3.623 0 6.56-2.946 6.56-6.58 0-3.636-2.937-6.582-6.56-6.582-3.623 0-6.561 2.946-6.561 6.581 0 3.635 2.938 6.581 6.56 6.581ZM141.059 40c3.623 0 6.56-2.946 6.56-6.581 0-3.635-2.937-6.581-6.56-6.581-3.623 0-6.561 2.946-6.561 6.58 0 3.636 2.938 6.582 6.56 6.582ZM127.679 26.583c3.623 0 6.561-2.946 6.561-6.581 0-3.635-2.938-6.581-6.561-6.581-3.624 0-6.56 2.946-6.56 6.581 0 3.635 2.936 6.581 6.56 6.581ZM154.439 26.583c3.624 0 6.56-2.946 6.56-6.581 0-3.635-2.936-6.581-6.56-6.581-3.623 0-6.561 2.946-6.561 6.581 0 3.635 2.938 6.581 6.56 6.581ZM141.059 24.488a4.479 4.479 0 0 0 4.472-4.486 4.479 4.479 0 0 0-4.472-4.485 4.479 4.479 0 0 0-4.472 4.485 4.479 4.479 0 0 0 4.472 4.486Z"/></g></svg></div>
+                <span class="nav__logo-sub">Zorgprofessionals</span>
+            </a>
+            <ul class="nav__links" id="navLinks">
+                <li><a href="#product">Product</a></li>
+                <li><a href="#widgets">Integraties</a></li>
+                <li><a href="#voorbeelden">Voorbeelden</a></li>
+                <li><a href="#his">HIS</a></li>
+                <li><a href="#app">App</a></li>
+                <li><a href="#contact" class="nav__cta">Aan de slag</a></li>
+            </ul>
+            <button class="nav__mobile" id="mobileToggle" aria-label="Menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero__deco-circle hero__deco-circle--1" data-parallax="0.04"></div>
+        <div class="hero__deco-circle hero__deco-circle--2" data-parallax="0.06"></div>
+        <div class="hero__deco-circle hero__deco-circle--3" data-parallax="0.08"></div>
+        <div class="hero__deco-half hero__deco-half--1" data-parallax="0.05"></div>
+        <div class="hero__deco-half hero__deco-half--2" data-parallax="0.07"></div>
+        <div class="hero__inner">
+            <div>
+                <div class="hero__badge">
+                    <span class="hero__badge-dot"></span>
+                    Powered by het NHG
+                </div>
+                <h1 class="hero__title">
+                    Betrouwbare<br>
+                    pati&euml;ntinformatie<br>
+                    <span class="hero__title-accent">in uw praktijk</span>
+                </h1>
+                <p class="hero__subtitle">
+                    Integreer Thuisarts.nl in uw praktijkwebsite en geef pati&euml;nten direct toegang tot betrouwbare, NHG-onderbouwde gezondheidsinformatie. Widgets, zoekfunctie en API &mdash; alles wat u nodig heeft.
+                </p>
+                <div class="hero__actions">
+                    <a href="#contact" class="btn btn--orange">
+                        Start met integreren
+                        <svg class="btn__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+                    </a>
+                    <a href="#product" class="btn btn--outline">Bekijk mogelijkheden</a>
+                </div>
+            </div>
+            <div class="hero__visual">
+                <div class="hero__mockup">
+                    <div class="hero__mockup-bar">
+                        <div class="hero__mockup-dot hero__mockup-dot--r"></div>
+                        <div class="hero__mockup-dot hero__mockup-dot--y"></div>
+                        <div class="hero__mockup-dot hero__mockup-dot--g"></div>
+                        <div class="hero__mockup-url">uwpraktijk.nl/informatie</div>
+                    </div>
+                    <div class="hero__mockup-search">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                        <span>Waar ben je naar op zoek?</span>
+                        <div class="hero__mockup-search-btn">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                        </div>
+                    </div>
+                    <div class="hero__mockup-tiles">
+                        <div class="hero__tile">
+                            <div class="hero__tile-deco"></div>
+                            <div class="hero__tile-title">Griep</div>
+                            <div class="hero__tile-text">Wat kun je zelf doen</div>
+                        </div>
+                        <div class="hero__tile">
+                            <div class="hero__tile-deco"></div>
+                            <div class="hero__tile-title">Rugpijn</div>
+                            <div class="hero__tile-text">Oefeningen en tips</div>
+                        </div>
+                        <div class="hero__tile">
+                            <div class="hero__tile-deco"></div>
+                            <div class="hero__tile-title">Diabetes</div>
+                            <div class="hero__tile-text">Dagelijks leven</div>
+                        </div>
+                        <div class="hero__tile">
+                            <div class="hero__tile-deco"></div>
+                            <div class="hero__tile-title">Eczeem</div>
+                            <div class="hero__tile-text">Verzorging &amp; advies</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero__float hero__float--1">
+                    <div class="hero__float-num">800+</div>
+                    <div class="hero__float-label">Onderwerpen</div>
+                </div>
+                <div class="hero__float hero__float--2">
+                    <div class="hero__float-num">6M+</div>
+                    <div class="hero__float-label">Bezoekers/maand</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROOF BAR -->
+    <section class="proof">
+        <div class="proof__inner">
+            <div class="proof__item">
+                <div class="proof__item-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <span><strong>NHG-onderbouwd</strong> &mdash; klinisch getoetst</span>
+            </div>
+            <div class="proof__item">
+                <div class="proof__item-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                </div>
+                <span><strong>6 miljoen</strong> bezoekers per maand</span>
+            </div>
+            <div class="proof__item">
+                <div class="proof__item-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                </div>
+                <span><strong>800+</strong> gezondheidsonderwerpen</span>
+            </div>
+            <div class="proof__item">
+                <div class="proof__item-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                </div>
+                <span><strong>Gratis</strong> te integreren</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section" id="product">
+        <div class="section__inner">
+            <div class="about__grid">
+                <div>
+                    <div class="section__header reveal">
+                        <div class="section__label">
+                            <span class="section__label-line"></span>
+                            Over Thuisarts.nl
+                        </div>
+                        <h2 class="section__title">De betrouwbaarste bron voor pati&euml;ntinformatie in Nederland</h2>
+                        <p class="section__desc">
+                            Thuisarts.nl is ontwikkeld door het Nederlands Huisartsen Genootschap (NHG) en biedt begrijpelijke, medisch onderbouwde informatie over meer dan 800 gezondheidsonderwerpen. De inhoud is gebaseerd op de NHG-Standaarden en wordt continu geactualiseerd door medische redacteuren.
+                        </p>
+                    </div>
+                    <div class="about__features reveal reveal--d1">
+                        <div class="about__feature">
+                            <div class="about__feature-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            </div>
+                            <div class="about__feature-title">NHG-gebaseerd</div>
+                            <div class="about__feature-text">Alle informatie is gebaseerd op de NHG-Standaarden en klinisch getoetst door huisartsen.</div>
+                        </div>
+                        <div class="about__feature">
+                            <div class="about__feature-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                            </div>
+                            <div class="about__feature-title">Begrijpelijke taal</div>
+                            <div class="about__feature-text">Geschreven op taalniveau B1, zodat informatie voor alle pati&euml;nten toegankelijk is.</div>
+                        </div>
+                        <div class="about__feature">
+                            <div class="about__feature-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+                            </div>
+                            <div class="about__feature-title">Zelfmanagement</div>
+                            <div class="about__feature-text">Helpt pati&euml;nten om zelf aan de slag te gaan met hun gezondheid en klachten.</div>
+                        </div>
+                        <div class="about__feature">
+                            <div class="about__feature-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            </div>
+                            <div class="about__feature-title">Altijd actueel</div>
+                            <div class="about__feature-text">Continu bijgewerkt door een team van medische redacteuren en huisartsen.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about__visual-frame reveal reveal--d2">
+                    <div class="about__visual-deco"></div>
+                    <div class="about__stat-row">
+                        <div class="about__stat-card">
+                            <div class="about__stat-num">800+</div>
+                            <div class="about__stat-text">Onderwerpen</div>
+                        </div>
+                        <div class="about__stat-card">
+                            <div class="about__stat-num">6M+</div>
+                            <div class="about__stat-text">Bezoekers/mnd</div>
+                        </div>
+                    </div>
+                    <div class="about__stat-row">
+                        <div class="about__stat-card">
+                            <div class="about__stat-num">150+</div>
+                            <div class="about__stat-text">Keuzehulpen</div>
+                        </div>
+                        <div class="about__stat-card">
+                            <div class="about__stat-num">B1</div>
+                            <div class="about__stat-text">Taalniveau</div>
+                        </div>
+                    </div>
+                    <div class="about__quote">
+                        <p class="about__quote-text">Thuisarts.nl is een onmisbaar hulpmiddel in mijn praktijk. Pati&euml;nten komen beter voorbereid op het consult en begrijpen hun aandoening beter.</p>
+                        <p class="about__quote-author">&mdash; Huisarts, Amsterdam</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WIDGETS -->
+    <section class="section section--white" id="widgets">
+        <div class="section__inner">
+            <div class="section__header section__header--center reveal">
+                <div class="section__label">
+                    <span class="section__label-line"></span>
+                    Integratie-opties
+                    <span class="section__label-line"></span>
+                </div>
+                <h2 class="section__title">Widgets voor uw praktijkwebsite</h2>
+                <p class="section__desc">
+                    Plaats kant-en-klare widgets op uw website. Uw pati&euml;nten krijgen direct toegang tot betrouwbare informatie, zonder uw site te verlaten.
+                </p>
+            </div>
+            <div class="widgets__grid">
+                <div class="widget-card reveal">
+                    <div class="widget-card__icon widget-card__icon--search">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                    </div>
+                    <h3 class="widget-card__title">Zoekwidget</h3>
+                    <p class="widget-card__desc">Een zoekbalk die u direct op uw website plaatst. Pati&euml;nten zoeken op klachten of aandoeningen en krijgen direct resultaten van Thuisarts.nl. Volledig aanpasbaar aan uw huisstijl.</p>
+                    <div class="widget-card__preview">
+                        <div class="widget-card__preview-label">Voorbeeld</div>
+                        <div class="p-search">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                            <span>Waar ben je naar op zoek?</span>
+                            <div class="p-search-btn">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-card__tags">
+                        <span class="widget-card__tag">Aanpasbaar</span>
+                        <span class="widget-card__tag">Responsive</span>
+                        <span class="widget-card__tag">Eenvoudig</span>
+                    </div>
+                </div>
+                <div class="widget-card reveal reveal--d1">
+                    <div class="widget-card__icon widget-card__icon--tile">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                    </div>
+                    <h3 class="widget-card__title">Tegel Widget</h3>
+                    <p class="widget-card__desc">Visueel aantrekkelijke tegels met populaire gezondheidsonderwerpen. Ideaal voor uw homepage of een speciale pati&euml;nteninformatiepagina. Kies zelf welke onderwerpen u toont.</p>
+                    <div class="widget-card__preview">
+                        <div class="widget-card__preview-label">Voorbeeld</div>
+                        <div class="p-tiles">
+                            <div class="p-tile"><div class="p-tile__name">Griep</div></div>
+                            <div class="p-tile"><div class="p-tile__name">Rugpijn</div></div>
+                            <div class="p-tile"><div class="p-tile__name">Diabetes</div></div>
+                            <div class="p-tile"><div class="p-tile__name">Astma</div></div>
+                        </div>
+                    </div>
+                    <div class="widget-card__tags">
+                        <span class="widget-card__tag">Visueel</span>
+                        <span class="widget-card__tag">Configureerbaar</span>
+                        <span class="widget-card__tag">Thematisch</span>
+                    </div>
+                </div>
+                <div class="widget-card reveal reveal--d2">
+                    <div class="widget-card__icon widget-card__icon--count">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+                    </div>
+                    <h3 class="widget-card__title">Teller Widget</h3>
+                    <p class="widget-card__desc">Toon actuele cijfers en statistieken over het gebruik van Thuisarts.nl. Laat pati&euml;nten zien hoeveel anderen al informatie opzochten over een onderwerp.</p>
+                    <div class="widget-card__preview">
+                        <div class="widget-card__preview-label">Voorbeeld</div>
+                        <div class="p-counts">
+                            <div class="p-count">
+                                <div class="p-count__num">12.4K</div>
+                                <div class="p-count__label">Griep</div>
+                            </div>
+                            <div class="p-count">
+                                <div class="p-count__num">8.7K</div>
+                                <div class="p-count__label">Rugpijn</div>
+                            </div>
+                            <div class="p-count">
+                                <div class="p-count__num">5.2K</div>
+                                <div class="p-count__label">Corona</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-card__tags">
+                        <span class="widget-card__tag">Live data</span>
+                        <span class="widget-card__tag">Statistieken</span>
+                        <span class="widget-card__tag">Vertrouwen</span>
+                    </div>
+                </div>
+                <div class="widget-card reveal reveal--d3">
+                    <div class="widget-card__icon widget-card__icon--api">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    </div>
+                    <h3 class="widget-card__title">API</h3>
+                    <p class="widget-card__desc">Bouw op maat gemaakte integraties met de Thuisarts API. Haal content op, doorzoek het archief en toon informatie precies zoals u wilt in uw eigen systeem.</p>
+                    <div class="widget-card__preview">
+                        <div class="widget-card__preview-label">Voorbeeld</div>
+                        <div style="background: var(--green-deeper); border-radius: var(--radius-sm); padding: 0.7rem; font-family: 'SF Mono', 'Consolas', monospace; font-size: 0.65rem; line-height: 1.6; color: rgba(255,255,255,0.7);">
+                            <span style="color: #7DD3FC;">GET</span> <span style="color: var(--lime);">/v1/artikelen</span><br>
+                            <span style="color: #7DD3FC;">GET</span> <span style="color: var(--lime);">/v1/zoek?q=griep</span>
+                        </div>
+                    </div>
+                    <div class="widget-card__tags">
+                        <span class="widget-card__tag">RESTful</span>
+                        <span class="widget-card__tag">Developer</span>
+                        <span class="widget-card__tag">Flexibel</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VOORBEELDEN -->
+    <section class="section search-section" id="voorbeelden">
+        <div class="search-section__bg"></div>
+        <div class="section__inner">
+            <div class="section__header section__header--center reveal">
+                <div class="section__label">
+                    <span class="section__label-line"></span>
+                    In de praktijk
+                    <span class="section__label-line"></span>
+                </div>
+                <h2 class="section__title">Organisaties die Thuisarts.nl integreren</h2>
+                <p class="section__desc">
+                    Van ziekenhuizen tot huisartsenpraktijken &mdash; steeds meer zorgorganisaties bieden hun pati&euml;nten betrouwbare Thuisarts-informatie aan via hun eigen website.
+                </p>
+            </div>
+            <div class="examples__grid">
+                <div class="example-card reveal">
+                    <div class="example-card__badge">Volledige integratie</div>
+                    <div class="example-card__header">
+                        <div class="example-card__icon" style="background: #E31937; font-weight: 800; font-size: 0.7rem; letter-spacing: 0.05em; color: white;">OLVG</div>
+                        <div>
+                            <h3 class="example-card__title">OLVG</h3>
+                            <p class="example-card__subtitle">Ziekenhuis, Amsterdam</p>
+                        </div>
+                    </div>
+                    <p class="example-card__desc">OLVG toont Thuisarts-informatie volledig ge&iuml;ntegreerd op hun medische informatiepagina's. Pati&euml;nten vinden betrouwbare, NHG-onderbouwde content direct op de ziekenhuiswebsite, aangevuld met eigen afdelingsinformatie.</p>
+                    <div class="example-card__preview">
+                        <div class="example-card__browser">
+                            <div class="example-card__browser-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="example-card__browser-url">olvg.nl/medische-informatie</div>
+                        </div>
+                        <div class="example-card__browser-body">
+                            <div class="example-card__mock-title">Acne</div>
+                            <div class="example-card__mock-source">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                Bron: Thuisarts.nl
+                            </div>
+                            <div class="example-card__mock-lines">
+                                <div style="width:100%"></div>
+                                <div style="width:90%"></div>
+                                <div style="width:95%"></div>
+                                <div style="width:60%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="https://olvg.nl/medische-informatie/acne/" target="_blank" rel="noopener" class="example-card__link">
+                        Bekijk voorbeeld
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+                <div class="example-card reveal reveal--d1">
+                    <div class="example-card__badge example-card__badge--widget">Widget</div>
+                    <div class="example-card__header">
+                        <div class="example-card__icon" style="background: #005CA9; font-weight: 800; font-size: 0.5rem; letter-spacing: 0.02em; color: white; text-align: center; line-height: 1.2;">HAP<br>E</div>
+                        <div>
+                            <h3 class="example-card__title">Huisartsenpost Eemland</h3>
+                            <p class="example-card__subtitle">Huisartsenpost, Amersfoort</p>
+                        </div>
+                    </div>
+                    <p class="example-card__desc">Huisartsenpost Eemland verwijst pati&euml;nten direct naar relevante Thuisarts-informatie bij veelvoorkomende klachten. Zo krijgen pati&euml;nten snel de juiste zelfzorginformatie.</p>
+                    <div class="example-card__preview">
+                        <div class="example-card__browser">
+                            <div class="example-card__browser-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="example-card__browser-url">huisartsenposteemland.nl</div>
+                        </div>
+                        <div class="example-card__browser-body">
+                            <div class="example-card__mock-title">Veelvoorkomende klachten</div>
+                            <div class="example-card__mock-tags">
+                                <span>Koorts kind</span>
+                                <span>Wonden</span>
+                                <span>Buikpijn</span>
+                                <span>Hooikoorts</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="https://huisartsenposteemland.nl/" target="_blank" rel="noopener" class="example-card__link">
+                        Bekijk voorbeeld
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API -->
+    <section class="section section--green" id="api">
+        <div class="api__bg"></div>
+        <div class="section__inner">
+            <div class="api__grid">
+                <div class="reveal">
+                    <div class="section__header">
+                        <div class="section__label">
+                            <span class="section__label-line"></span>
+                            Voor developers
+                        </div>
+                        <h2 class="section__title">Thuisarts API</h2>
+                        <p class="section__desc">Bouw diepere integraties met de Thuisarts API. Haal content op, doorzoek het volledige archief en cre&euml;er op maat gemaakte oplossingen voor uw praktijk of zorgsysteem.</p>
+                    </div>
+                    <div class="api__features">
+                        <div class="api__feature">
+                            <div class="api__feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+                            <div>
+                                <div class="api__feature-title">RESTful API</div>
+                                <div class="api__feature-text">Gestandaardiseerde endpoints voor artikelen, zoekresultaten en metadata.</div>
+                            </div>
+                        </div>
+                        <div class="api__feature">
+                            <div class="api__feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+                            <div>
+                                <div class="api__feature-title">EPD-integratie</div>
+                                <div class="api__feature-text">Koppel Thuisarts-informatie direct aan uw Elektronisch Pati&euml;ntendossier.</div>
+                            </div>
+                        </div>
+                        <div class="api__feature">
+                            <div class="api__feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                            <div>
+                                <div class="api__feature-title">Beveiligde toegang</div>
+                                <div class="api__feature-text">API-keys en authenticatie voor veilige en betrouwbare verbindingen.</div>
+                            </div>
+                        </div>
+                        <div class="api__feature">
+                            <div class="api__feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+                            <div>
+                                <div class="api__feature-title">Uitgebreide documentatie</div>
+                                <div class="api__feature-text">Volledige technische docs, voorbeelden en support voor snelle implementatie.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reveal reveal--d1">
+                    <div class="api__code">
+                        <div class="api__code-header">
+                            <div class="api__code-dot api__code-dot--r"></div>
+                            <div class="api__code-dot api__code-dot--y"></div>
+                            <div class="api__code-dot api__code-dot--g"></div>
+                            <span class="api__code-title">voorbeeld-integratie.js</span>
+                        </div>
+                        <div class="api__code-body">
+<span class="cmt">// Thuisarts.nl API voorbeeld</span>
+<span class="kw">const</span> <span class="fn">response</span> <span class="pn">=</span> <span class="kw">await</span> <span class="fn">fetch</span><span class="pn">(</span>
+  <span class="str">'https://api.thuisarts.nl/v1/artikelen'</span><span class="pn">,</span>
+  <span class="pn">{</span>
+    <span class="prop">headers</span><span class="pn">: {</span>
+      <span class="str">'Authorization'</span><span class="pn">:</span> <span class="str">`Bearer ${API_KEY}`</span><span class="pn">,</span>
+      <span class="str">'Content-Type'</span><span class="pn">:</span> <span class="str">'application/json'</span>
+    <span class="pn">}</span>
+  <span class="pn">}</span>
+<span class="pn">);</span>
+
+<span class="kw">const</span> <span class="pn">{</span> <span class="fn">artikelen</span> <span class="pn">}</span> <span class="pn">=</span> <span class="kw">await</span> <span class="fn">response</span><span class="pn">.</span><span class="fn">json</span><span class="pn">();</span>
+
+<span class="cmt">// Zoek specifieke onderwerpen</span>
+<span class="kw">const</span> <span class="fn">results</span> <span class="pn">=</span> <span class="kw">await</span> <span class="fn">fetch</span><span class="pn">(</span>
+  <span class="str">'https://api.thuisarts.nl/v1/zoek'</span><span class="pn">,</span>
+  <span class="pn">{</span>
+    <span class="prop">method</span><span class="pn">:</span> <span class="str">'POST'</span><span class="pn">,</span>
+    <span class="prop">body</span><span class="pn">:</span> <span class="fn">JSON</span><span class="pn">.</span><span class="fn">stringify</span><span class="pn">({</span>
+      <span class="prop">query</span><span class="pn">:</span> <span class="str">'hoofdpijn'</span><span class="pn">,</span>
+      <span class="prop">limit</span><span class="pn">:</span> <span class="str">10</span>
+    <span class="pn">})</span>
+  <span class="pn">}</span>
+<span class="pn">);</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INFORMATIE DELEN -->
+    <section class="section section--white" id="delen">
+        <div class="section__inner">
+            <div class="section__header section__header--center reveal">
+                <div class="section__label">
+                    <span class="section__label-line"></span>
+                    Informatie delen
+                    <span class="section__label-line"></span>
+                </div>
+                <h2 class="section__title">Deel Thuisarts-informatie met uw pati&euml;nten</h2>
+                <p class="section__desc">
+                    Er zijn meerdere manieren om Thuisarts-informatie te delen met uw pati&euml;nten. Kies de methode die het beste past bij uw werkwijze.
+                </p>
+            </div>
+            <div class="share__grid">
+                <div class="share-card reveal">
+                    <div class="share-card__text">
+                        <div class="share-card__title">Informatierecepten</div>
+                        <div class="share-card__desc">Print of stuur een informatierecepten vanuit de NHG-module. Pati&euml;nten krijgen een persoonlijk overzicht.</div>
+                    </div>
+                    <div class="share-card__img share-card__img--placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    </div>
+                </div>
+                <div class="share-card reveal reveal--d1">
+                    <div class="share-card__text">
+                        <div class="share-card__title">E-mail via Thuisarts.nl</div>
+                        <div class="share-card__desc">Op elke pagina staat een deelknop. Stuur de link naar een specifiek artikel direct naar uw pati&euml;nt.</div>
+                    </div>
+                    <div class="share-card__img share-card__img--placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    </div>
+                </div>
+                <div class="share-card reveal reveal--d2">
+                    <div class="share-card__text">
+                        <div class="share-card__title">Direct vanuit uw HIS</div>
+                        <div class="share-card__desc">Bij een ge&iuml;ntegreerd HIS kunt u Thuisarts-informatie direct vanuit het pati&euml;ntendossier delen. Binnenkort ook beschikbaar voor CGM Huisarts (juni 2026).</div>
+                    </div>
+                    <div class="share-card__img share-card__img--placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HIS INTEGRATIES -->
+    <section class="section" id="his">
+        <div class="section__inner">
+            <div class="his__grid">
+                <div class="reveal">
+                    <div class="section__header">
+                        <div class="section__label">
+                            <span class="section__label-line"></span>
+                            HIS-integraties
+                        </div>
+                        <h2 class="section__title">Thuisarts.nl in uw huisartseninformatiesysteem</h2>
+                        <p class="section__desc">Thuisarts.nl is ge&iuml;ntegreerd in de meest gebruikte HIS-systemen in Nederland. Open relevante pati&euml;ntinformatie direct vanuit het dossier, zonder te wisselen tussen applicaties.</p>
+                    </div>
+                    <div class="his__logos">
+                        <div class="his__logo-card">
+                            <div class="his__logo-icon his__logo-icon--medicom">M</div>
+                            <div class="his__logo-name">Medicom</div>
+                            <div class="his__logo-status"><span class="his__logo-status-dot"></span> Beschikbaar</div>
+                        </div>
+                        <div class="his__logo-card">
+                            <div class="his__logo-icon his__logo-icon--microhis">X</div>
+                            <div class="his__logo-name">MicroHIS X</div>
+                            <div class="his__logo-status"><span class="his__logo-status-dot"></span> Beschikbaar</div>
+                        </div>
+                        <div class="his__logo-card">
+                            <div class="his__logo-icon his__logo-icon--promedico">P</div>
+                            <div class="his__logo-name">Promedico</div>
+                            <div class="his__logo-status"><span class="his__logo-status-dot"></span> Beschikbaar</div>
+                        </div>
+                        <div class="his__logo-card">
+                            <div class="his__logo-icon his__logo-icon--tetrahis">T</div>
+                            <div class="his__logo-name">TetraHIS</div>
+                            <div class="his__logo-status"><span class="his__logo-status-dot"></span> Beschikbaar</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reveal reveal--d1">
+                    <div class="his__mockup">
+                        <div class="his__mockup-bar">
+                            <div class="his__mockup-dot his__mockup-dot--r"></div>
+                            <div class="his__mockup-dot his__mockup-dot--y"></div>
+                            <div class="his__mockup-dot his__mockup-dot--g"></div>
+                            <span class="his__mockup-title">Pati&euml;ntendossier &mdash; Medicom</span>
+                        </div>
+                        <div class="his__mockup-patient">
+                            <div class="his__mockup-avatar">JV</div>
+                            <div>
+                                <div class="his__mockup-name">J. de Vries</div>
+                                <div class="his__mockup-meta">Geb. 14-03-1985 &bull; BSN ****1234</div>
+                            </div>
+                        </div>
+                        <div class="his__mockup-thuisarts">
+                            <div class="his__mockup-thuisarts-header">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                Thuisarts.nl &mdash; Relevante artikelen
+                            </div>
+                            <div class="his__mockup-thuisarts-items">
+                                <div class="his__mockup-thuisarts-item">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                    Lage rugpijn
+                                </div>
+                                <div class="his__mockup-thuisarts-item">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                    Hernia
+                                </div>
+                                <div class="his__mockup-thuisarts-item">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                    Oefeningen bij rugpijn
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- APP -->
+    <section class="section section--white" id="app">
+        <div class="section__inner">
+            <div class="app__grid">
+                <div class="app__phone-wrap reveal">
+                    <div class="app__phone">
+                        <div class="app__phone-notch"></div>
+                        <div class="app__phone-screen">
+                            <!-- Status bar -->
+                            <div class="app__phone-statusbar">
+                                <span>9:41</span>
+                                <div class="app__phone-statusbar-icons">
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="17" y="4" width="4" height="16" rx="1"/><rect x="11" y="8" width="4" height="12" rx="1"/><rect x="5" y="12" width="4" height="8" rx="1"/></svg>
+                                </div>
+                            </div>
+                            <!-- Logo area -->
+                            <div class="app__phone-logo-area">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="120" height="30" viewBox="0 0 161 40"><g fill="#023729" fill-rule="nonzero"><path d="m100.95 25.935 1.511-2.143c1.396 1.128 2.876 1.42 3.863 1.42 1.483 0 2.295-.637 2.295-1.565 0-2.721-7.177-1.04-7.177-5.992 0-2.517 1.861-4.315 4.737-4.315 1.164 0 3.108.291 4.678 1.565l-1.48 2.055a5.349 5.349 0 0 0-3.166-1.07c-1.396 0-2.005.695-2.005 1.449 0 2.604 7.148 1.186 7.148 6.137 0 2.634-2.006 4.256-5.114 4.256-2.063 0-3.862-.724-5.288-1.793l-.003-.004ZM98.843 24.826v2.576c-.297.12-1.182.33-2.216.33-3.456 0-4.076-2.306-4.076-4.761v-7.127h-2.825v-2.725h2.825V8.3h2.865v4.82h3.812v2.725h-3.812v6.8c0 1.618.355 2.397 1.86 2.397.505 0 1.27-.091 1.567-.211v-.004ZM82.432 27.733h-2.734V13.61h2.734v1.695c1.31-1.633 2.652-1.96 5.274-1.96v2.735c-4.476 0-5.274 1.903-5.274 4.34v7.313ZM76.553 27.354H73.7v-1.622c-1.19 1.36-2.825 1.997-4.726 1.997-4.192 0-7.46-3.154-7.46-7.182 0-4.027 3.33-7.21 7.46-7.21 1.905 0 3.508.666 4.726 2.026V13.6h2.854v13.755Zm-2.916-6.803c0-2.488-1.99-4.573-4.667-4.573-2.677 0-4.639 2.026-4.639 4.573 0 2.547 1.991 4.573 4.639 4.573 2.647 0 4.667-2.085 4.667-4.573ZM49.614 25.935l1.512-2.143c1.396 1.128 2.876 1.42 3.862 1.42 1.484 0 2.296-.637 2.296-1.565 0-2.721-7.177-1.04-7.177-5.992 0-2.517 1.86-4.315 4.736-4.315 1.165 0 3.109.291 4.679 1.565l-1.48 2.055c-1.222-.898-2.44-1.07-3.166-1.07-1.396 0-2.005.695-2.005 1.449 0 2.604 7.148 1.186 7.148 6.137 0 2.634-2.006 4.256-5.114 4.256-2.063 0-3.866-.724-5.288-1.793l-.003-.004ZM46.836 27.733H44V13.345h2.836zM38.016 20.86v-7.52h2.843v8.317c0 4.395-2.459 6.075-6.397 6.075-3.94 0-6.398-1.68-6.398-6.075V13.34h2.872v7.52c0 2.623.624 4.217 3.526 4.217 2.9 0 3.554-1.594 3.554-4.217ZM25.144 27.733h-2.905v-7.578c0-2.892-1.106-4.384-3.471-4.384s-3.623 1.612-3.623 4.595v7.367h-2.873V5.206h2.873v9.62c.957-1.096 2.125-1.827 4.13-1.827 3.384 0 5.869 2.008 5.869 6.545v8.19ZM9.335 24.86v2.546c-.3.12-1.211.327-2.266.327-3.54 0-4.175-2.28-4.175-4.707v-7.047H0v-2.696h2.894V8.299h2.934v4.984h3.903v2.696H5.828v6.723c0 1.6.363 2.368 1.904 2.368.515 0 1.302-.087 1.603-.207v-.004ZM141.059 13.162c3.623 0 6.56-2.946 6.56-6.58 0-3.636-2.937-6.582-6.56-6.582-3.623 0-6.561 2.946-6.561 6.581 0 3.635 2.938 6.581 6.56 6.581ZM141.059 40c3.623 0 6.56-2.946 6.56-6.581 0-3.635-2.937-6.581-6.56-6.581-3.623 0-6.561 2.946-6.561 6.58 0 3.636 2.938 6.582 6.56 6.582ZM127.679 26.583c3.623 0 6.561-2.946 6.561-6.581 0-3.635-2.938-6.581-6.561-6.581-3.624 0-6.56 2.946-6.56 6.581 0 3.635 2.936 6.581 6.56 6.581ZM154.439 26.583c3.624 0 6.56-2.946 6.56-6.581 0-3.635-2.936-6.581-6.56-6.581-3.623 0-6.561 2.946-6.561 6.581 0 3.635 2.938 6.581 6.56 6.581ZM141.059 24.488a4.479 4.479 0 0 0 4.472-4.486 4.479 4.479 0 0 0-4.472-4.485 4.479 4.479 0 0 0-4.472 4.485 4.479 4.479 0 0 0 4.472 4.486Z"/></g></svg>
+                            </div>
+                            <!-- Green search card -->
+                            <div class="app__phone-search-card">
+                                <div class="app__phone-greeting">Goedemorgen</div>
+                                <div class="app__phone-greeting-sub">Waar ben je naar op zoek?</div>
+                                <div class="app__phone-search-input">
+                                    <span>Zoeken...</span>
+                                    <div class="app__phone-search-btn">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- News items -->
+                            <div class="app__phone-news">
+                                <div class="app__phone-news-title">Nieuws en tips</div>
+                                <div class="app__phone-news-item">
+                                    <div class="app__phone-news-thumb"><img src="https://www.thuisarts.nl/sites/default/files/styles/media_library_image_teaser/public/2026-02/vrouw-heeft-buikgriep-misschien-door-iets-in-het-eten.png?itok=exGUYJyb" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-sm);"></div>
+                                    <div class="app__phone-news-text">Buikgriep: dit kun je doen om je beter te voelen</div>
+                                </div>
+                                <div class="app__phone-news-item">
+                                    <div class="app__phone-news-thumb"><img src="https://www.thuisarts.nl/sites/default/files/styles/media_library_image_teaser/public/2024-01/jonge-vrouw-met-griep-hangt-op-bank-en-snuit-neus.jpg?itok=OVJdQNE2" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-sm);"></div>
+                                    <div class="app__phone-news-text">Griep in 2026: wat kun je doen?</div>
+                                </div>
+                                <div class="app__phone-news-item">
+                                    <div class="app__phone-news-thumb"><img src="https://www.thuisarts.nl/sites/default/files/styles/media_library_image_teaser/public/2024-07/slapende-oudere-vrouw-met-wekker-op-voorgrond.jpg?itok=-yTehaT2" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-sm);"></div>
+                                    <div class="app__phone-news-text">Zo slaap je beter</div>
+                                </div>
+                                <div class="app__phone-news-item">
+                                    <div class="app__phone-news-thumb"><img src="https://www.thuisarts.nl/sites/default/files/styles/media_library_image_teaser/public/subject/man-heeft-jeuk-aan-arm-door-eczeem.jpg?itok=nb6Llqg3" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-sm);"></div>
+                                    <div class="app__phone-news-text">Een droge huid? Smeer met basiszalf</div>
+                                </div>
+                            </div>
+                            <!-- Tab bar -->
+                            <div class="app__phone-tabbar">
+                                <div class="app__phone-tab app__phone-tab--active">
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                                    <span>Home</span>
+                                </div>
+                                <div class="app__phone-tab">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                                    <span>Zoeken</span>
+                                </div>
+                                <div class="app__phone-tab">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+                                    <span>Bewaard</span>
+                                </div>
+                                <div class="app__phone-tab">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                                    <span>Instellingen</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reveal reveal--d1">
+                    <div class="section__header">
+                        <div class="section__label">
+                            <span class="section__label-line"></span>
+                            Mobiele app
+                        </div>
+                        <h2 class="section__title">De Thuisarts App voor uw pati&euml;nten</h2>
+                        <p class="section__desc">Verwijs pati&euml;nten naar de gratis Thuisarts-app. Alle betrouwbare informatie altijd bij de hand, ook offline beschikbaar.</p>
+                    </div>
+                    <div class="app__features">
+                        <div class="app__feat">
+                            <div class="app__feat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+                            <div>
+                                <div class="app__feat-title">Altijd toegankelijk</div>
+                                <div class="app__feat-text">Pati&euml;nten hebben de informatie altijd bij de hand, ook zonder internet.</div>
+                            </div>
+                        </div>
+                        <div class="app__feat">
+                            <div class="app__feat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></div>
+                            <div>
+                                <div class="app__feat-title">Favorieten opslaan</div>
+                                <div class="app__feat-text">Pati&euml;nten slaan onderwerpen op als favoriet voor snelle toegang.</div>
+                            </div>
+                        </div>
+                        <div class="app__feat">
+                            <div class="app__feat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
+                            <div>
+                                <div class="app__feat-title">Delen na het consult</div>
+                                <div class="app__feat-text">Verwijs pati&euml;nten na het consult eenvoudig naar het juiste artikel.</div>
+                            </div>
+                        </div>
+                        <div class="app__feat">
+                            <div class="app__feat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+                            <div>
+                                <div class="app__feat-title">Pati&euml;ntcommunicatie</div>
+                                <div class="app__feat-text">Ondersteun de communicatie door te verwijzen naar heldere informatie.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="app__stores">
+                        <a href="#" class="app__store-btn">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+                            <div><div class="app__store-sm">Download in de</div><div class="app__store-big">App Store</div></div>
+                        </a>
+                        <a href="#" class="app__store-btn">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.61 1.81L13.53 12 3.61 22.19c-.36-.22-.61-.64-.61-1.12V2.93c0-.48.25-.9.61-1.12zm.97-.49l11.08 6.39L12.96 12 4.58 1.32zm14.34 4.29L15.5 12l3.42 6.39 2.02-1.17c.88-.51.88-1.35 0-1.86L18.92 5.61zM4.58 22.68L12.96 12l2.7 4.29L4.58 22.68z"/></svg>
+                            <div><div class="app__store-sm">Beschikbaar op</div><div class="app__store-big">Google Play</div></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" id="contact">
+        <div class="cta__deco cta__deco--1"></div>
+        <div class="cta__deco cta__deco--2"></div>
+        <div class="cta__inner">
+            <div class="reveal">
+                <div class="section__label" style="justify-content:center;">
+                    <span class="section__label-line"></span>
+                    Aan de slag
+                    <span class="section__label-line"></span>
+                </div>
+                <h2 class="cta__title">Klaar om Thuisarts.nl te integreren in uw praktijk?</h2>
+                <p class="cta__desc">Neem contact met ons op en ontdek hoe u Thuisarts.nl het beste kunt inzetten voor uw pati&euml;nten. Wij helpen u graag met de implementatie.</p>
+            </div>
+            <form class="cta__form reveal reveal--d1" onsubmit="event.preventDefault(); handleSubmit();">
+                <div class="cta__row">
+                    <div class="cta__group">
+                        <label class="cta__label">Naam</label>
+                        <input type="text" class="cta__input" placeholder="Uw volledige naam">
+                    </div>
+                    <div class="cta__group">
+                        <label class="cta__label">E-mailadres</label>
+                        <input type="email" class="cta__input" placeholder="naam@praktijk.nl">
+                    </div>
+                </div>
+                <div class="cta__row">
+                    <div class="cta__group">
+                        <label class="cta__label">Praktijknaam</label>
+                        <input type="text" class="cta__input" placeholder="Naam van uw praktijk">
+                    </div>
+                    <div class="cta__group">
+                        <label class="cta__label">Ge&iuml;nteresseerd in</label>
+                        <select class="cta__select">
+                            <option value="">Maak een keuze...</option>
+                            <option>Widgets</option>
+                            <option>Volledige integratie</option>
+                            <option>API-integratie</option>
+                            <option>App-verwijzing</option>
+                            <option>Alles</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="cta__row">
+                    <div class="cta__group cta__group--full">
+                        <label class="cta__label">Bericht</label>
+                        <textarea class="cta__textarea" placeholder="Vertel ons meer over uw wensen..."></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="cta__submit">Verstuur aanvraag</button>
+                <p class="cta__note">We nemen binnen 2 werkdagen contact met u op.</p>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer__inner">
+            <div class="footer__grid">
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <div class="footer__logo-svg"><svg xmlns="http://www.w3.org/2000/svg" width="161" height="40" viewBox="0 0 161 40"><g fill="#023729" fill-rule="nonzero"><path d="m100.95 25.935 1.511-2.143c1.396 1.128 2.876 1.42 3.863 1.42 1.483 0 2.295-.637 2.295-1.565 0-2.721-7.177-1.04-7.177-5.992 0-2.517 1.861-4.315 4.737-4.315 1.164 0 3.108.291 4.678 1.565l-1.48 2.055a5.349 5.349 0 0 0-3.166-1.07c-1.396 0-2.005.695-2.005 1.449 0 2.604 7.148 1.186 7.148 6.137 0 2.634-2.006 4.256-5.114 4.256-2.063 0-3.862-.724-5.288-1.793l-.003-.004ZM98.843 24.826v2.576c-.297.12-1.182.33-2.216.33-3.456 0-4.076-2.306-4.076-4.761v-7.127h-2.825v-2.725h2.825V8.3h2.865v4.82h3.812v2.725h-3.812v6.8c0 1.618.355 2.397 1.86 2.397.505 0 1.27-.091 1.567-.211v-.004ZM82.432 27.733h-2.734V13.61h2.734v1.695c1.31-1.633 2.652-1.96 5.274-1.96v2.735c-4.476 0-5.274 1.903-5.274 4.34v7.313ZM76.553 27.354H73.7v-1.622c-1.19 1.36-2.825 1.997-4.726 1.997-4.192 0-7.46-3.154-7.46-7.182 0-4.027 3.33-7.21 7.46-7.21 1.905 0 3.508.666 4.726 2.026V13.6h2.854v13.755Zm-2.916-6.803c0-2.488-1.99-4.573-4.667-4.573-2.677 0-4.639 2.026-4.639 4.573 0 2.547 1.991 4.573 4.639 4.573 2.647 0 4.667-2.085 4.667-4.573ZM49.614 25.935l1.512-2.143c1.396 1.128 2.876 1.42 3.862 1.42 1.484 0 2.296-.637 2.296-1.565 0-2.721-7.177-1.04-7.177-5.992 0-2.517 1.86-4.315 4.736-4.315 1.165 0 3.109.291 4.679 1.565l-1.48 2.055c-1.222-.898-2.44-1.07-3.166-1.07-1.396 0-2.005.695-2.005 1.449 0 2.604 7.148 1.186 7.148 6.137 0 2.634-2.006 4.256-5.114 4.256-2.063 0-3.866-.724-5.288-1.793l-.003-.004ZM46.836 27.733H44V13.345h2.836zM38.016 20.86v-7.52h2.843v8.317c0 4.395-2.459 6.075-6.397 6.075-3.94 0-6.398-1.68-6.398-6.075V13.34h2.872v7.52c0 2.623.624 4.217 3.526 4.217 2.9 0 3.554-1.594 3.554-4.217ZM25.144 27.733h-2.905v-7.578c0-2.892-1.106-4.384-3.471-4.384s-3.623 1.612-3.623 4.595v7.367h-2.873V5.206h2.873v9.62c.957-1.096 2.125-1.827 4.13-1.827 3.384 0 5.869 2.008 5.869 6.545v8.19ZM9.335 24.86v2.546c-.3.12-1.211.327-2.266.327-3.54 0-4.175-2.28-4.175-4.707v-7.047H0v-2.696h2.894V8.299h2.934v4.984h3.903v2.696H5.828v6.723c0 1.6.363 2.368 1.904 2.368.515 0 1.302-.087 1.603-.207v-.004ZM141.059 13.162c3.623 0 6.56-2.946 6.56-6.58 0-3.636-2.937-6.582-6.56-6.582-3.623 0-6.561 2.946-6.561 6.581 0 3.635 2.938 6.581 6.56 6.581ZM141.059 40c3.623 0 6.56-2.946 6.56-6.581 0-3.635-2.937-6.581-6.56-6.581-3.623 0-6.561 2.946-6.561 6.58 0 3.636 2.938 6.582 6.56 6.582ZM127.679 26.583c3.623 0 6.561-2.946 6.561-6.581 0-3.635-2.938-6.581-6.561-6.581-3.624 0-6.56 2.946-6.56 6.581 0 3.635 2.936 6.581 6.56 6.581ZM154.439 26.583c3.624 0 6.56-2.946 6.56-6.581 0-3.635-2.936-6.581-6.56-6.581-3.623 0-6.561 2.946-6.561 6.581 0 3.635 2.938 6.581 6.56 6.581ZM141.059 24.488a4.479 4.479 0 0 0 4.472-4.486 4.479 4.479 0 0 0-4.472-4.485 4.479 4.479 0 0 0-4.472 4.485 4.479 4.479 0 0 0 4.472 4.486Z"/></g></svg></div>
+                    </div>
+                    <p class="footer__brand-text">Thuisarts.nl is d&eacute; medische informatiebron voor pati&euml;nten, ontwikkeld door het Nederlands Huisartsen Genootschap. Betrouwbaar, begrijpelijk en altijd actueel.</p>
+                </div>
+                <div>
+                    <h4 class="footer__col-title">Product</h4>
+                    <ul class="footer__links">
+                        <li><a href="#widgets">Widgets</a></li>
+                        <li><a href="#voorbeelden">Voorbeelden</a></li>
+                        <li><a href="#api">API</a></li>
+                        <li><a href="#app">Thuisarts App</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer__col-title">Support</h4>
+                    <ul class="footer__links">
+                        <li><a href="#">Documentatie</a></li>
+                        <li><a href="#">Implementatiegids</a></li>
+                        <li><a href="#">Veelgestelde vragen</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer__col-title">Over ons</h4>
+                    <ul class="footer__links">
+                        <li><a href="#">Over het NHG</a></li>
+                        <li><a href="#">Redactie</a></li>
+                        <li><a href="#">Privacy</a></li>
+                        <li><a href="#">Voorwaarden</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <span class="footer__copy">&copy; 2026 Thuisarts.nl &mdash; Nederlands Huisartsen Genootschap</span>
+                <span class="footer__nhg">
+                    <span class="footer__nhg-dot"></span>
+                    Een initiatief van het NHG
+                </span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Nav scroll
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => nav.classList.toggle('nav--scrolled', window.scrollY > 40));
+
+        // Mobile nav
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navLinks = document.getElementById('navLinks');
+        mobileToggle.addEventListener('click', () => navLinks.classList.toggle('nav__links--open'));
+        navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('nav__links--open')));
+
+        // Scroll reveal
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('reveal--visible'); });
+        }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+        document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+        // Form
+        function handleSubmit() {
+            const btn = document.querySelector('.cta__submit');
+            btn.textContent = 'Verstuurd!';
+            btn.style.background = 'var(--green-dark)';
+            setTimeout(() => { btn.textContent = 'Verstuur aanvraag'; btn.style.background = ''; }, 3000);
+        }
+
+        // Parallax mouse tracking on hero deco elements
+        const hero = document.querySelector('.hero');
+        const parallaxEls = document.querySelectorAll('[data-parallax]');
+
+        if (window.matchMedia('(min-width: 769px)').matches) {
+            let mouseX = 0, mouseY = 0;
+            let currentX = 0, currentY = 0;
+            let rafId = null;
+
+            hero.addEventListener('mousemove', e => {
+                const rect = hero.getBoundingClientRect();
+                // Normalize mouse position to -1...1 from center
+                mouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+                mouseY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+
+                if (!rafId) {
+                    rafId = requestAnimationFrame(updateParallax);
+                }
+            });
+
+            hero.addEventListener('mouseleave', () => {
+                mouseX = 0;
+                mouseY = 0;
+                if (!rafId) {
+                    rafId = requestAnimationFrame(updateParallax);
+                }
+            });
+
+            function updateParallax() {
+                // Smooth interpolation
+                currentX += (mouseX - currentX) * 0.08;
+                currentY += (mouseY - currentY) * 0.08;
+
+                parallaxEls.forEach(el => {
+                    const speed = parseFloat(el.dataset.parallax);
+                    const moveX = currentX * speed * 800;
+                    const moveY = currentY * speed * 600;
+                    // Preserve any existing rotation from CSS
+                    const baseTransform = el.classList.contains('hero__deco-half--1') ? 'rotate(25deg)' :
+                                          el.classList.contains('hero__deco-half--2') ? 'rotate(-15deg)' : '';
+                    el.style.transform = `translate(${moveX}px, ${moveY}px) ${baseTransform}`;
+                });
+
+                // Keep animating until close to target
+                if (Math.abs(mouseX - currentX) > 0.001 || Math.abs(mouseY - currentY) > 0.001) {
+                    rafId = requestAnimationFrame(updateParallax);
+                } else {
+                    rafId = null;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
