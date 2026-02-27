@@ -309,15 +309,41 @@
             padding: 2.5rem; position: relative; overflow: hidden;
         }
         .about__visual-deco {
-            position: absolute; width: 100px; height: 100px;
-            background: var(--lime); border-radius: 50%; opacity: 0.15;
-            top: -20px; right: -20px;
-            animation: decoFloat 8s ease-in-out infinite;
+            position: absolute; width: 200px; height: 200px;
+            background: var(--lime); border-radius: 50%; opacity: 0.18;
+            top: -40px; right: -40px;
+            filter: blur(1px);
+            animation: decoFloat 12s ease-in-out infinite;
+        }
+        .about__visual-deco--2 {
+            position: absolute; width: 120px; height: 120px;
+            background: var(--lime); border-radius: 50%; opacity: 0.1;
+            bottom: -30px; left: -20px;
+            filter: blur(1px);
+            animation: decoFloat2 15s ease-in-out infinite;
+        }
+        .about__visual-deco--3 {
+            position: absolute; width: 60px; height: 60px;
+            background: var(--lime); border-radius: 50%; opacity: 0.12;
+            top: 40%; left: 15%;
+            filter: blur(0.5px);
+            animation: decoFloat3 10s ease-in-out infinite;
         }
         @keyframes decoFloat {
             0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(-6px, 8px) scale(1.05); }
-            66% { transform: translate(4px, -5px) scale(0.97); }
+            25% { transform: translate(-30px, 20px) scale(1.08); }
+            50% { transform: translate(-10px, 40px) scale(0.95); }
+            75% { transform: translate(15px, 10px) scale(1.04); }
+        }
+        @keyframes decoFloat2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            30% { transform: translate(25px, -15px) scale(1.06); }
+            60% { transform: translate(10px, -30px) scale(0.97); }
+        }
+        @keyframes decoFloat3 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            40% { transform: translate(-15px, -20px) scale(1.1); }
+            70% { transform: translate(10px, 15px) scale(0.92); }
         }
         .about__stat-row { display: flex; gap: 1rem; margin-bottom: 1rem; }
         .about__stat-card {
@@ -527,6 +553,16 @@
         .example-card__link:hover { color: var(--orange); gap: 0.6rem; }
         .example-card__logo {
             height: 32px; width: auto; object-fit: contain;
+        }
+        .example-card__header--logo {
+            display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1rem;
+            justify-content: space-between;
+        }
+        .example-card__header-left {
+            display: flex; flex-direction: column;
+        }
+        .example-card__header-logo {
+            height: 40px; width: auto; max-width: 180px; object-fit: contain;
         }
 
         /* ============ SHARE INFO SECTION ============ */
@@ -784,17 +820,14 @@
         }
         .app__feat-title { font-weight: 700; font-size: 0.92rem; color: var(--green-dark); margin-bottom: 0.15rem; }
         .app__feat-text { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
-        .app__stores { display: flex; gap: 0.75rem; margin-top: 2.25rem; }
-        .app__store-btn {
-            display: inline-flex; align-items: center; gap: 0.55rem;
-            background: var(--green-dark); color: var(--white);
-            text-decoration: none; padding: 0.7rem 1.1rem;
-            border-radius: var(--radius-md); transition: all 0.2s;
+        .app__stores { display: flex; gap: 0.75rem; margin-top: 2.25rem; align-items: center; }
+        .app__store-badge {
+            display: inline-block; transition: all 0.2s; border-radius: var(--radius-md); overflow: hidden;
         }
-        .app__store-btn:hover { background: var(--green-deeper); transform: translateY(-2px); box-shadow: var(--shadow-md); }
-        .app__store-btn svg { width: 18px; height: 18px; }
-        .app__store-sm { font-size: 0.58rem; opacity: 0.7; }
-        .app__store-big { font-size: 0.85rem; font-weight: 700; line-height: 1.1; }
+        .app__store-badge:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .app__store-badge img {
+            height: 48px; width: auto; display: block;
+        }
 
         /* ============ CTA ============ */
         .cta { padding: 6rem 2rem; position: relative; overflow: hidden; }
@@ -1106,6 +1139,8 @@
                 </div>
                 <div class="about__visual-frame reveal reveal--d2">
                     <div class="about__visual-deco"></div>
+                    <div class="about__visual-deco about__visual-deco--2"></div>
+                    <div class="about__visual-deco about__visual-deco--3"></div>
                     <div class="about__stat-row">
                         <div class="about__stat-card">
                             <div class="about__stat-num">800+</div>
@@ -1263,12 +1298,20 @@
             <div class="examples__grid">
                 <div class="example-card reveal">
                     <div class="example-card__badge">Volledige integratie</div>
-                    <div class="example-card__header">
-                        <div class="example-card__icon" style="background: #E31937; font-weight: 800; font-size: 0.7rem; letter-spacing: 0.05em; color: white;">OLVG</div>
-                        <div>
+                    <div class="example-card__header--logo">
+                        <div class="example-card__header-left">
                             <h3 class="example-card__title">OLVG</h3>
                             <p class="example-card__subtitle">Ziekenhuis, Amsterdam</p>
                         </div>
+                        <!-- OLVG Logo -->
+                        <svg class="example-card__header-logo" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+                            <text x="0" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="64" font-weight="900" fill="#1B2A6E" letter-spacing="-3">olvg</text>
+                            <circle cx="182" cy="14" r="14" fill="url(#olvg-grad)"/>
+                            <path d="M176 14l4 4 8-8" stroke="white" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            <defs><radialGradient id="olvg-grad" cx="40%" cy="40%"><stop offset="0%" stop-color="#F7941D"/><stop offset="100%" stop-color="#E31937"/></radialGradient></defs>
+                            <text x="200" y="12" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" fill="#1B2A6E" font-weight="400">een santeon</text>
+                            <text x="200" y="25" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" fill="#1B2A6E" font-weight="400">ziekenhuis</text>
+                        </svg>
                     </div>
                     <p class="example-card__desc">OLVG toont Thuisarts-informatie volledig ge&iuml;ntegreerd op hun medische informatiepagina's. Pati&euml;nten vinden betrouwbare, NHG-onderbouwde content direct op de ziekenhuiswebsite, aangevuld met eigen afdelingsinformatie.</p>
                     <div class="example-card__preview">
@@ -1299,12 +1342,27 @@
                 </div>
                 <div class="example-card reveal reveal--d1">
                     <div class="example-card__badge example-card__badge--widget">Widget</div>
-                    <div class="example-card__header">
-                        <div class="example-card__icon" style="background: #005CA9; font-weight: 800; font-size: 0.5rem; letter-spacing: 0.02em; color: white; text-align: center; line-height: 1.2;">HAP<br>E</div>
-                        <div>
+                    <div class="example-card__header--logo">
+                        <div class="example-card__header-left">
                             <h3 class="example-card__title">Huisartsenpost Eemland</h3>
                             <p class="example-card__subtitle">Huisartsenpost, Amersfoort</p>
                         </div>
+                        <!-- Huisartsen Spoedpost Eemland Logo -->
+                        <svg class="example-card__header-logo" viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg" style="height: 48px;">
+                            <g fill="#E63329">
+                                <!-- Stylized + cross -->
+                                <path d="M0 22 L0 48 Q0 52 4 52 L18 52 L18 66 Q18 70 22 70 L32 70 Q36 70 36 66 L36 52 L50 52 Q54 52 54 48 L54 22 Q54 18 50 18 L36 18 L36 4 Q36 0 32 0 L22 0 Q18 0 18 4 L18 18 L4 18 Q0 18 0 22Z"/>
+                                <!-- Inner cutout to make it look like the logo -->
+                                <rect x="10" y="26" width="34" height="18" rx="2" fill="white"/>
+                                <rect x="20" y="10" width="14" height="50" rx="2" fill="white"/>
+                                <path d="M12 24 L12 46 Q12 48 14 48 L20 48 L20 62 Q20 64 22 64 L32 64 Q34 64 34 62 L34 48 L40 48 Q42 48 42 46 L42 24 Q42 22 40 22 L34 22 L34 8 Q34 6 32 6 L22 6 Q20 6 20 8 L20 22 L14 22 Q12 22 12 24Z" fill="#E63329"/>
+                            </g>
+                            <g fill="#E63329" font-family="'Plus Jakarta Sans', sans-serif">
+                                <text x="62" y="24" font-size="14.5" font-weight="400">Huisartsen</text>
+                                <text x="62" y="44" font-size="14.5" font-weight="700">Spoedpost</text>
+                                <text x="62" y="64" font-size="14.5" font-weight="400">Eemland</text>
+                            </g>
+                        </svg>
                     </div>
                     <p class="example-card__desc">Huisartsenpost Eemland verwijst pati&euml;nten direct naar relevante Thuisarts-informatie bij veelvoorkomende klachten. Zo krijgen pati&euml;nten snel de juiste zelfzorginformatie.</p>
                     <div class="example-card__preview">
@@ -1496,7 +1554,7 @@
                         <div class="his__logo-card">
                             <div class="his__logo-icon his__logo-icon--tetrahis">T</div>
                             <div class="his__logo-name">TetraHIS</div>
-                            <div class="his__logo-status"><span class="his__logo-status-dot"></span> Beschikbaar</div>
+                            <div class="his__logo-status" style="color: var(--orange);"><span class="his__logo-status-dot" style="background: var(--orange);"></span> Verwacht Q4 2026</div>
                         </div>
                     </div>
                 </div>
@@ -1654,13 +1712,34 @@
                         </div>
                     </div>
                     <div class="app__stores">
-                        <a href="#" class="app__store-btn">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
-                            <div><div class="app__store-sm">Download in de</div><div class="app__store-big">App Store</div></div>
+                        <a href="#" class="app__store-badge" aria-label="Download in de App Store">
+                            <svg viewBox="0 0 270 80" xmlns="http://www.w3.org/2000/svg" style="height: 48px; width: auto;">
+                                <rect width="270" height="80" rx="12" fill="#023729"/>
+                                <!-- Apple logo -->
+                                <g transform="translate(18, 14)" fill="white">
+                                    <path d="M38.6 24.2c-.1-5.5 4.5-8.2 4.7-8.3-2.5-3.7-6.5-4.2-7.9-4.3-3.3-.3-6.6 2-8.3 2s-4.4-2-7.2-1.9c-3.7.1-7.2 2.2-9.1 5.5-3.9 6.8-.9 16.9 2.8 22.4 1.8 2.7 4 5.7 6.9 5.6 2.7-.1 3.8-1.8 7.1-1.8s4.2 1.8 7.1 1.7c3-.1 4.9-2.7 6.7-5.4 2.1-3.1 3-6.1 3-6.3-.1-.1-5.8-2.2-5.8-8.7zM33.2 8.3c1.5-1.9 2.6-4.4 2.3-7-2.2.1-4.9 1.5-6.5 3.4-1.4 1.6-2.7 4.3-2.3 6.8 2.5.2 5-1.3 6.5-3.2z" transform="scale(0.82)"/>
+                                </g>
+                                <g fill="white" font-family="'Plus Jakarta Sans', -apple-system, sans-serif">
+                                    <text x="62" y="35" font-size="12" opacity="0.8">Download in de</text>
+                                    <text x="62" y="58" font-size="22" font-weight="700">App Store</text>
+                                </g>
+                            </svg>
                         </a>
-                        <a href="#" class="app__store-btn">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.61 1.81L13.53 12 3.61 22.19c-.36-.22-.61-.64-.61-1.12V2.93c0-.48.25-.9.61-1.12zm.97-.49l11.08 6.39L12.96 12 4.58 1.32zm14.34 4.29L15.5 12l3.42 6.39 2.02-1.17c.88-.51.88-1.35 0-1.86L18.92 5.61zM4.58 22.68L12.96 12l2.7 4.29L4.58 22.68z"/></svg>
-                            <div><div class="app__store-sm">Beschikbaar op</div><div class="app__store-big">Google Play</div></div>
+                        <a href="#" class="app__store-badge" aria-label="Ontdek het op Google Play">
+                            <svg viewBox="0 0 270 80" xmlns="http://www.w3.org/2000/svg" style="height: 48px; width: auto;">
+                                <rect width="270" height="80" rx="12" fill="#023729"/>
+                                <!-- Google Play triangle icon -->
+                                <g transform="translate(16, 14)">
+                                    <path d="M4 2.5L26 24 4 45.5V2.5z" fill="#4DB6AC"/>
+                                    <path d="M4 2.5L26 24 35 16 12 2.5H4z" fill="#DCE775"/>
+                                    <path d="M4 45.5L26 24l9 8L12 45.5H4z" fill="#F44336"/>
+                                    <path d="M35 16L26 24l9 8 5-3c2-1.2 2-3.2 0-4.4L35 16z" fill="#FFC107"/>
+                                </g>
+                                <g fill="white" font-family="'Plus Jakarta Sans', -apple-system, sans-serif">
+                                    <text x="64" y="35" font-size="12" opacity="0.8">ONTDEK HET OP</text>
+                                    <text x="64" y="58" font-size="22" font-weight="700">Google Play</text>
+                                </g>
+                            </svg>
                         </a>
                     </div>
                 </div>
